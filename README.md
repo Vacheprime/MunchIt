@@ -1,1 +1,1 @@
-# MunchIt
+# Munch't

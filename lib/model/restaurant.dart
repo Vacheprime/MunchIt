@@ -1,10 +1,11 @@
-import 'Review.dart';
+import 'review.dart';
 
-class Food {
+class Restaurant {
   // Information
   int id;
   String name;
   double price;
+  String location;
   Map<String, String> allergies;
   List<String> image;
   // Statistics
@@ -13,10 +14,11 @@ class Food {
   List<Review> reviews;
 
 
-  Food ({
+  Restaurant ({
     required this.id,
     required this.name,
     required this.price,
+    required this.location,
     required this.allergies,
     required this.image,
     required this.likes,

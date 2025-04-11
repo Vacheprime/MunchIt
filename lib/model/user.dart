@@ -2,7 +2,7 @@ import 'package:bcrypt/bcrypt.dart';
 
 /// User class is used to represent a user of the application.
 class User {
-  String? _id;
+  String? _docId;
   late String _userName;
   late String _email;
   late String _phone;
@@ -26,13 +26,13 @@ class User {
   /// Getter for the user id.
   ///
   /// Returns the id of the user or null if the user does not have an id.
-  String? getId() {
-    return _id;
+  String? getDocId() {
+    return _docId;
   }
 
   /// Setter for the user id.
-  void setId(String id) {
-    _id = id;
+  void setDocId(String id) {
+    _docId = id;
   }
 
   /// Getter for the user's username.
@@ -100,7 +100,6 @@ class User {
     if (!validatePassword(password)) {
       throw ArgumentError("The password is invalid!");
     }
-    String hash = BCrypt.hashpw(password, BCrypt.gensalt());
     return BCrypt.checkpw(password, _passwordHash);
   }
 

@@ -1,4 +1,4 @@
-
+// Review class used to represent user reviews of restaurants.
 class Review {
   int id;
   double rating;

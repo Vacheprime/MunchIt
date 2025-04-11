@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../model/User.dart';
+
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage(User user);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -10,6 +12,10 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
+      ),
+    );
   }
 }

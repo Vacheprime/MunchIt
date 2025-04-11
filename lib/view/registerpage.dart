@@ -1,0 +1,134 @@
+import 'package:flutter/material.dart';
+import 'package:munchit/model/User.dart';
+import 'package:munchit/view/mainpage.dart';
+import 'package:munchit/view/settingspage.dart';
+
+class Register extends StatefulWidget {
+  const Register({super.key});
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+
+  TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirm_password = TextEditingController();
+
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(onPressed: () {
+          Navigator.of(context).pop();
+        },
+            icon: Icon(Icons.arrow_back)),
+        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
+        centerTitle: true,
+        title: Text("Munch't"),
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
+          }, icon: Icon(Icons.settings))
+        ],
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Text("Register"),
+
+            TextField(
+              controller: username,
+              decoration: InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+
+            TextField(
+              controller: email,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+
+            TextField(
+              controller: phone,
+              decoration: InputDecoration(
+                labelText: 'Phone',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            
+            
+            TextField(
+              controller: password,
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+              ),
+            ),
+
+            TextField(
+              controller: confirm_password,
+              obscureText: _obscureConfirmPassword,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+                border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureConfirmPassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureConfirmPassword = !_obscureConfirmPassword;
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            ElevatedButton(onPressed: () {
+              //user creation
+              if(password.text == confirm_password.text){
+                User user = new User(username.text, email.text, phone.text, password.text);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user)));
+              } else {
+
+              }
+
+            }, child: Text("Register"))
+
+          ],
+        ),
+      ),
+    );
+  }
+}

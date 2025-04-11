@@ -9,6 +9,8 @@
 .idea
 .idea/*
 
+# Ignore google-services.json
+google-services.json
 
 
 # Flutter repo-specific

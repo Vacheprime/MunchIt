@@ -11,7 +11,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
@@ -21,30 +20,38 @@ class _RegisterState extends State<Register> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {
-          Navigator.of(context).pop();
-        },
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             icon: Icon(Icons.arrow_back)),
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         centerTitle: true,
         title: Text("Munch't"),
         actions: [
-          IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
-          }, icon: Icon(Icons.settings))
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Settings()));
+              },
+              icon: Icon(Icons.settings))
         ],
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Register"),
-
+            Text(
+              "Register",
+              style: TextStyle(fontSize: 36),
+            ),
+            SizedBox(
+              height: 16,
+            ),
             TextField(
               controller: username,
               decoration: InputDecoration(
@@ -53,7 +60,6 @@ class _RegisterState extends State<Register> {
               ),
             ),
             SizedBox(height: 16),
-
             TextField(
               controller: email,
               decoration: InputDecoration(
@@ -62,17 +68,14 @@ class _RegisterState extends State<Register> {
               ),
             ),
             SizedBox(height: 16),
-
             TextField(
               controller: phone,
               decoration: InputDecoration(
-                labelText: 'Phone',
+                labelText: 'Phone (xxx) xxx-xxxx',
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 16),
-            
-            
             TextField(
               controller: password,
               obscureText: _obscurePassword,
@@ -81,9 +84,7 @@ class _RegisterState extends State<Register> {
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscurePassword
-                        ? Icons.visibility_off
-                        : Icons.visibility,
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
                   ),
                   onPressed: () {
                     setState(() {
@@ -93,7 +94,7 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
-
+            SizedBox(height: 16),
             TextField(
               controller: confirm_password,
               obscureText: _obscureConfirmPassword,
@@ -114,18 +115,40 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
-            ElevatedButton(onPressed: () {
-              //user creation
-              if(password.text == confirm_password.text){
-                User user = new User(username.text, email.text, phone.text, password.text);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user)));
-              } else {
-
-              }
-
-            }, child: Text("Register"))
-
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //user creation
+                if (password.text.isNotEmpty &&
+                    username.text.isNotEmpty &&
+                    email.text.isNotEmpty &&
+                    phone.text.isNotEmpty &&
+                    confirm_password.text.isNotEmpty) {
+                  if (password.text == confirm_password.text) {
+                    User user = new User(
+                        username.text, email.text, phone.text, password.text);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MainPage(user)));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            "The password and confirm password do not match")));
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Cannot leave a text field empty")));
+                }
+              },
+              child: Text("Register"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromRGBO(248, 145, 145, 1),
+                foregroundColor: Colors.black,
+              ),
+            ),
           ],
         ),
       ),

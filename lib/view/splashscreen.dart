@@ -23,23 +23,25 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Text(
-            "Munch't",
-            style: TextStyle(fontSize: 36),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Icon(
-            Icons.local_restaurant,
-            size: 200,
-          )
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Munch't",
+              style: TextStyle(fontSize: 36),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Icon(
+              Icons.local_restaurant,
+              size: 200,
+            )
+          ],
+        ),
       ),
     );
   }
 }
-

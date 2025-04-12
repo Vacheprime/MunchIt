@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/view/aboutuspage.dart';
 
+import '../model/User.dart';
+
 class Settings extends StatefulWidget {
   const Settings({super.key});
+  const Settings.user({required User user});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -109,6 +112,10 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
             ),
+            SizedBox(height: 20,),
+            ElevatedButton(onPressed: () {
+              //save functionality
+            }, child: Text("Save"))
           ],
         ),
       ),

@@ -25,7 +25,18 @@ class _ForgottenPasswordState extends State<ForgottenPassword> {
         ],
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
       ),
-
+      body: Center(
+        child: Column(
+          children: [
+            Text("Reset Password"),
+            TextField(
+              decoration: InputDecoration(
+                hintText: "Email or Phone Number"
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

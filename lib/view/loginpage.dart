@@ -85,10 +85,11 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink[100],
+                  backgroundColor: Color.fromRGBO(248, 145, 145, 1),
                   foregroundColor: Colors.black,
                 ),
                 onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("The username and password does not match. Please try again!")));
                   //if() {
 
                   //}

@@ -31,8 +31,8 @@ class User {
   }
 
   /// Setter for the user id.
-  void setDocId(String id) {
-    _docId = id;
+  void setDocId(String docId) {
+    _docId = docId;
   }
 
   /// Getter for the user's username.

@@ -119,6 +119,10 @@ class Restaurant {
     _reviews.remove(review);
   }
 
+  double getRating() {
+    return _reviews.map((review) => review.getRating()).reduce((r1, r2) => r1 + r2) / _reviews.length;
+  }
+
   static bool validateName(String name) {
     if (Utils.hasInvalidSpaces(name)) return false;
     RegExp validNameRegex = RegExp(r"^[\p{L} ]+$", unicode: true);

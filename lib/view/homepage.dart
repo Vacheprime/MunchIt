@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/view/loginpage.dart';
+import 'package:munchit/view/registerpage.dart';
 import 'package:munchit/view/settingspage.dart';
-import 'mainpage.dart';
+import 'registerpage.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -15,7 +16,9 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[100],
+        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
+        title: Text("Munch't"),
+        centerTitle: true,
         actions: [
           IconButton(onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
@@ -31,7 +34,11 @@ class _HomepageState extends State<Homepage> {
             SizedBox(height: 10,),
             ElevatedButton(onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-            }, child: Text("Login"), )
+            }, child: Text("Login"), ),
+
+            ElevatedButton(onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+            }, child: Text("Register"), ),
           ],
         )
       ),

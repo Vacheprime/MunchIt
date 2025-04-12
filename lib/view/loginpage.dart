@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:munchit/view/forgottenpwd.dart';
 import 'mainpage.dart';
 import 'settingspage.dart';
 
@@ -19,17 +20,18 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[100],
+        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           }, // Handle back navigation
         ),
         title: const Text("Munch't"),
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: Icon(Icons.settings),
             onPressed: () {
               Navigator.push(
                 context,
@@ -87,17 +89,19 @@ class _LoginPageState extends State<LoginPage> {
                   foregroundColor: Colors.black,
                 ),
                 onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                  //if() {
+
+                  //}
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
                 },
                 child: const Text('Submit'),
               ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  // Handle password reset
-                  debugPrint("Password reset clicked");
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ForgottenPassword()));
                 },
-                child: const Text(
+                child: Text(
                   'Password Forgotten?',
                   style: TextStyle(
                     decoration: TextDecoration.underline,

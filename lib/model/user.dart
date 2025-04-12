@@ -7,7 +7,7 @@ class User {
   late String _email;
   late String _phone;
   late String _passwordHash;
-  late UserSettings settings; // Make the settings public for easier access
+  UserSettings settings = UserSettings(); // Make the settings public for easier access
 
   /// Constructor used when creating a user that does not exist on the
   /// database.
@@ -20,7 +20,6 @@ class User {
     setEmail(email);
     setPhone(phone);
     setPasswordHash(password);
-    settings = UserSettings(); // Default settings
   }
 
   /// Getter for the user id.

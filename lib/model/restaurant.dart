@@ -1,5 +1,6 @@
 import 'food.dart';
 import 'package:munchit/services/utils/utils.dart';
+import 'package:munchit/model/review.dart';
 
 /// Restaurant class os used to represent a restaurant in the application.
 class Restaurant {
@@ -12,7 +13,7 @@ class Restaurant {
   int _likes = 0;
   int _saves = 0;
   final List<Food> _foodItems = [];
-  final List<String> _reviewDocIds = [];
+  final List<Review> _reviews = [];
 
   Restaurant(String name, String location, String phone, String description, String image) {
     setName(name);
@@ -106,26 +107,22 @@ class Restaurant {
     _saves--;
   }
 
-  List<String> getReviewDocIds() {
-    return _reviewDocIds;
+  List<Review> getReviews() {
+    return _reviews;
   }
 
-  void addReviewDocId(String reviewDocId) {
-    _reviewDocIds.add(reviewDocId);
+  void addReview(Review review) {
+    _reviews.add(review);
   }
 
-  void removeReviewDocId(String reviewDocId) {
-    _reviewDocIds.remove(reviewDocId);
+  void removeReview(Review review) {
+    _reviews.remove(review);
   }
 
   static bool validateName(String name) {
     if (Utils.hasInvalidSpaces(name)) return false;
     RegExp validNameRegex = RegExp(r"^[\p{L} ]+$", unicode: true);
     return validNameRegex.hasMatch(name);
-  }
-
-  static bool validatePrice(double price) {
-    return price > 0;
   }
 
   static bool validateLocation(String location) {

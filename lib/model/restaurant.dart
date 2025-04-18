@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'food.dart';
 import 'package:munchit/services/utils/utils.dart';
 import 'package:munchit/model/review.dart';
@@ -9,13 +11,13 @@ class Restaurant {
   late String _location;
   late String _phone;
   late String _description;
-  late String _image; // DATA TYPE TO BE DEFINED!
+  late ImageProvider _image; // DATA TYPE TO BE DEFINED!
   int _likes = 0;
   int _saves = 0;
   final List<Food> _foodItems = [];
   final List<Review> _reviews = [];
 
-  Restaurant(String name, String location, String phone, String description, String image) {
+  Restaurant(String name, String location, String phone, String description, ImageProvider image) {
     setName(name);
     setLocation(location);
     setPhone(phone);
@@ -67,11 +69,11 @@ class Restaurant {
     _description = description;
   }
 
-  String getImage() {
+  ImageProvider getImage() {
     return _image;
   }
 
-  void setImage(String image) {
+  void setImage(ImageProvider image) {
     _image = image;
   }
 

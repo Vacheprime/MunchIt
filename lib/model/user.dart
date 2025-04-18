@@ -1,4 +1,7 @@
 import 'package:bcrypt/bcrypt.dart';
+import 'package:munchit/model/restaurant.dart';
+import 'food.dart';
+import 'review.dart';
 
 /// User class is used to represent a user of the application.
 class User {
@@ -8,6 +11,11 @@ class User {
   late String _phone;
   late String _passwordHash;
   UserSettings settings = UserSettings(); // Make the settings public for easier access
+  late List<Restaurant> _likedRestaurants;
+  late List<Restaurant> _savedRestaurants;
+  late List<Restaurant> _createdRestaurants;
+  late List<Food> _createdFoods;
+  late List<Review> _createdReviews;
 
   /// Constructor used when creating a user that does not exist on the
   /// database.
@@ -20,6 +28,8 @@ class User {
     setEmail(email);
     setPhone(phone);
     setPasswordHash(password);
+    settings = UserSettings(); // Default settings
+    _savedRestaurants = List.empty();
   }
 
   /// Getter for the user id.
@@ -89,6 +99,10 @@ class User {
       throw ArgumentError("The phone number is invalid!");
     }
     _phone = phone;
+  }
+
+  List<Restaurant> getSavedRestaurants() {
+    return _savedRestaurants;
   }
 
   /// Compare a [password] with the current user's password.

@@ -22,6 +22,13 @@ class _AccountState extends State<Account> {
           }, icon: Icon(Icons.arrow_back))
         ],
       ),
+      body: Center(
+        child: Column(
+          children: [
+            Text("Account")
+          ],
+        ),
+      ),
     );
   }
 }

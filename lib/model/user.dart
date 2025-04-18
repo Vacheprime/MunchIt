@@ -1,16 +1,16 @@
 import 'package:bcrypt/bcrypt.dart';
-import 'package:munchit/model/Restaurant.dart';
-import 'Food.dart';
-import 'Review.dart';
+import 'package:munchit/model/restaurant.dart';
+import 'food.dart';
+import 'review.dart';
 
 /// User class is used to represent a user of the application.
 class User {
-  String? _id;
+  String? _docId;
   late String _userName;
   late String _email;
   late String _phone;
   late String _passwordHash;
-  late UserSettings settings; // Make the settings public for easier access
+  UserSettings settings = UserSettings(); // Make the settings public for easier access
   late List<Restaurant> _likedRestaurants;
   late List<Restaurant> _savedRestaurants;
   late List<Restaurant> _createdRestaurants;
@@ -28,20 +28,20 @@ class User {
     setEmail(email);
     setPhone(phone);
     setPasswordHash(password);
-    settings = UserSettings();
-    _savedRestaurants = List.empty();// Default settings
+    settings = UserSettings(); // Default settings
+    _savedRestaurants = List.empty();
   }
 
   /// Getter for the user id.
   ///
   /// Returns the id of the user or null if the user does not have an id.
-  String? getId() {
-    return _id;
+  String? getDocId() {
+    return _docId;
   }
 
   /// Setter for the user id.
-  void setId(String id) {
-    _id = id;
+  void setDocId(String docId) {
+    _docId = docId;
   }
 
   /// Getter for the user's username.
@@ -113,7 +113,6 @@ class User {
     if (!validatePassword(password)) {
       throw ArgumentError("The password is invalid!");
     }
-    String hash = BCrypt.hashpw(password, BCrypt.gensalt());
     return BCrypt.checkpw(password, _passwordHash);
   }
 

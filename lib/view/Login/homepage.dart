@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:munchit/view/loginpage.dart';
-import 'package:munchit/view/registerpage.dart';
+import 'package:munchit/view/Login/loginpage.dart';
+import 'package:munchit/view/Login/registerpage.dart';
 import 'package:munchit/view/settingspage.dart';
 import 'registerpage.dart';
 

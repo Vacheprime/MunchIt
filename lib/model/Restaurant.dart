@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+
 import 'Review.dart';
 
 class Restaurant {
@@ -7,7 +11,7 @@ class Restaurant {
   double price;
   String location;
   Map<String, String> allergies;
-  List<String> image;
+  ImageProvider image;
   // Statistics
   int likes;
   int saves;

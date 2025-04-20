@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/Restaurant.dart';
 import 'package:munchit/model/User.dart';
-import 'followingpage.dart'; // <- your following page
-import 'Restaurant/createrestaurantpage.dart'; // <- your create page
+import 'package:munchit/view/UserDetails/accountpage.dart';
+import 'package:munchit/view/UserDetails/userstatspage.dart';
+import 'package:munchit/view/settingspage.dart';
+import 'followingpage.dart';
+import 'Restaurant/createrestaurantpage.dart';
 
 class MainPage extends StatefulWidget {
   final User user;
@@ -36,8 +39,8 @@ class _MainPageState extends State<MainPage> {
             decoration: InputDecoration(
               hintText: "Search",
               prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             ),
           ),
         ),
@@ -52,44 +55,43 @@ class _MainPageState extends State<MainPage> {
                   leading: Container(
                       width: 60,
                       height: 60,
-                      child: Image(image: restaurant.image)
-                  ),
-                  title: Text('${restaurant.name}'),
+                      child: Image(image: restaurant.getImage())),
+                  title: Text('${restaurant.getName()}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${restaurant.location}'),
+                      Text('${restaurant.getLocation()}'),
                       Row(
                         children: [
-                          Column(
-                              children: [
-                                IconButton(onPressed: () {},
-                                  icon: Icon(Icons.favorite_border),
-                                  iconSize: 16,),
-                                SizedBox(width: 4),
-                                Text('${restaurant.likes}'),
-                              ]
-                          ),
+                          Column(children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.favorite_border),
+                              iconSize: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text('${restaurant.getLikes()}'),
+                          ]),
                           SizedBox(width: 10),
-                          Column(
-                              children: [
-                                IconButton(onPressed: () {},
-                                  icon: Icon(Icons.request_page),
-                                  iconSize: 16,),
-                                SizedBox(width: 4),
-                                Text('${restaurant.saves}'),
-                              ]
-                          ),
+                          Column(children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.request_page),
+                              iconSize: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text('${restaurant.getSaves()}'),
+                          ]),
                           SizedBox(width: 10),
-                          Column(
-                              children: [
-                                IconButton(onPressed: () {},
-                                  icon: Icon(Icons.comment),
-                                  iconSize: 16,),
-                                SizedBox(width: 4),
-                                Text('${restaurant.reviews.length}'),
-                              ]
-                          ),
+                          Column(children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.comment),
+                              iconSize: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text('${restaurant.getReviews().length}'),
+                          ]),
                           SizedBox(width: 10),
                           Icon(Icons.star, size: 16),
                           SizedBox(width: 4),
@@ -114,14 +116,14 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final List<Widget> _pages = [
       buildSuggestedPage(),
       FollowingPage(user: widget.user, key: const ValueKey("FollowingPage")),
-      CreateRestaurant(user: widget.user, key: const ValueKey("CreateRestaurantPage")),
+      CreateRestaurant(
+          user: widget.user, key: const ValueKey("CreateRestaurantPage")),
     ];
 
-     return Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
         child: Column(
@@ -131,9 +133,28 @@ class _MainPageState extends State<MainPage> {
               child: const Center(
                   child: Text("Options", style: TextStyle(fontSize: 24))),
             ),
-            const ListTile(title: Text("• Account")),
-            const ListTile(title: Text("• Your Stats")),
-            const ListTile(title: Text("• Settings")),
+            ListTile(
+              title: Text("• Account"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Account(user: widget.user)));
+              },
+            ),
+            ListTile(
+              title: Text("• Your Stats"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Stats(user: widget.user)));
+              },
+            ),
+            ListTile(
+              title: Text("• Settings"),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Settings()));
+              },
+            ),
           ],
         ),
       ),
@@ -165,22 +186,23 @@ class _MainPageState extends State<MainPage> {
         },
         child: _pages[_currentIndex],
       ),
-       bottomNavigationBar: BottomNavigationBar(
-         currentIndex: _currentIndex,
-         onTap: (index) {
-           if (index != _currentIndex) {
-             setState(() {
-               _previousIndex = _currentIndex;
-               _currentIndex = index;
-             });
-           }
-         },
-         items: const [
-           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Suggested"),
-           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Following"),
-           BottomNavigationBarItem(icon: Icon(Icons.add_box), label: "Create"),
-         ],
-       ),
-     );
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          if (index != _currentIndex) {
+            setState(() {
+              _previousIndex = _currentIndex;
+              _currentIndex = index;
+            });
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Suggested"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: "Following"),
+          BottomNavigationBarItem(icon: Icon(Icons.add_box), label: "Create"),
+        ],
+      ),
+    );
   }
 }

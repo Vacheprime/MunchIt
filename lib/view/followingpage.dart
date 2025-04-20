@@ -9,7 +9,7 @@ class FollowingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Restaurant> saved = user.getSavedRestaurants();
+    List<Restaurant> saved = user.getSavedRestaurants().cast<Restaurant>();
 
     return Column(
       children: [
@@ -33,13 +33,13 @@ class FollowingPage extends StatelessWidget {
                   leading: Container(
                     width: 60,
                     height: 60,
-                    child: Image(image: restaurant.image), // Placeholder for image
+                    child: Image(image: restaurant.getImage()), // Placeholder for image
                   ),
-                  title: Text(restaurant.name),
+                  title: Text(restaurant.getName()),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${restaurant.location}'),
+                      Text('${restaurant.getLocation()}'),
                       Row(
                         children: [
                           Column(
@@ -48,7 +48,7 @@ class FollowingPage extends StatelessWidget {
                                   icon: Icon(Icons.favorite_border),
                                   iconSize: 16,),
                                 SizedBox(width: 4),
-                                Text('${restaurant.likes}'),
+                                Text('${restaurant.getLikes()}'),
                               ]
                           ),
                           SizedBox(width: 10),
@@ -58,7 +58,7 @@ class FollowingPage extends StatelessWidget {
                                   icon: Icon(Icons.request_page),
                                   iconSize: 16,),
                                 SizedBox(width: 4),
-                                Text('${restaurant.saves}'),
+                                Text('${restaurant.getSaves()}'),
                               ]
                           ),
                           SizedBox(width: 10),
@@ -68,7 +68,7 @@ class FollowingPage extends StatelessWidget {
                                   icon: Icon(Icons.comment),
                                   iconSize: 16,),
                                 SizedBox(width: 4),
-                                Text('${restaurant.reviews.length}'),
+                                Text('${restaurant.getReviews().length}'),
                               ]
                           ),
                           SizedBox(width: 10),

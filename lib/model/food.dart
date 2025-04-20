@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:munchit/services/utils/utils.dart';
 import 'review.dart';
 
@@ -6,7 +7,7 @@ class Food {
   String? _docId;
   late String _name;
   late double _price;
-  late String _image;
+  late ImageProvider _image;
   late String _allergies;
   bool _hasNuts = false;
   bool _hasPeanuts = false;
@@ -14,7 +15,7 @@ class Food {
   int _saves = 0;
   final List<Review> _reviews = [];
 
-  Food(String name, double price, String image, {bool hasNuts = false, bool hasPeanuts = false, String allergies = ""}) {
+  Food(String name, double price, ImageProvider image, {bool hasNuts = false, bool hasPeanuts = false, String allergies = ""}) {
     setName(name);
     setPrice(price);
     setImage(image);
@@ -49,11 +50,11 @@ class Food {
     _price = price;
   }
 
-  String getImage() {
+  ImageProvider getImage() {
     return _image;
   }
 
-  void setImage(String image) {
+  void setImage(ImageProvider image) {
     _image = image;
   }
 

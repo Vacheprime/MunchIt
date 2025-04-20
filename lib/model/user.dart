@@ -101,6 +101,9 @@ class User {
     _phone = phone;
   }
 
+  /// Getter for the user's saved restaurants.
+  ///
+  /// Returns the list of the saved restaurants of the user.
   List<Restaurant> getSavedRestaurants() {
     return _savedRestaurants;
   }

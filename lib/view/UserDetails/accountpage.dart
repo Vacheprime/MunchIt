@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../model/User.dart';
+
 class Account extends StatefulWidget {
-  const Account({super.key});
+  final User user;
+
+  const Account({super.key, required this.user});
 
   @override
   State<Account> createState() => _AccountState();
@@ -12,8 +16,7 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {
-        }, icon: Icon(Icons.menu)),
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         title: Text("Munch't"),
         centerTitle: true,
         actions: [

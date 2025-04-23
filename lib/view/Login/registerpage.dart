@@ -32,14 +32,6 @@ class _RegisterState extends State<Register> {
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         centerTitle: true,
         title: Text("Munch't"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Settings()));
-              },
-              icon: Icon(Icons.settings))
-        ],
       ),
       body: Center(
         child: Column(

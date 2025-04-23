@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../model/User.dart';
 
 class AboutUs extends StatefulWidget {
-  const AboutUs({super.key});
+  final User user;
+
+  const AboutUs({super.key, required this.user});
 
   @override
   State<AboutUs> createState() => _AboutUsState();
@@ -24,7 +27,7 @@ class _AboutUsState extends State<AboutUs> {
           children: [
             Text("About Us", style: TextStyle(fontSize: 48),),
             SizedBox(height: 20,),
-            Text(""),
+            Text(""), // need about us info
           ],
         ),
       ),

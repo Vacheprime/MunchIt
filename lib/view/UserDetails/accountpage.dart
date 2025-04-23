@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/view/UserDetails/changepasswordpage.dart';
 import 'package:munchit/view/UserDetails/userstatspage.dart';
-
 import '../../model/User.dart';
 import '../settingspage.dart';
 
@@ -61,7 +60,7 @@ class _AccountState extends State<Account> {
               title: Text("• Settings"),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Settings.user(user: widget.user)));
+                    MaterialPageRoute(builder: (context) => Settings(user: widget.user)));
               },
             ),
           ],
@@ -119,7 +118,7 @@ class _AccountState extends State<Account> {
         ElevatedButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ChangePassword()));
+                MaterialPageRoute(builder: (context) => ChangePassword(user: widget.user,)));
           },
           child: Text(
             "Change Password",

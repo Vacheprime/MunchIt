@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/Restaurant.dart';
+import '../model/User.dart';
 import '../model/food.dart';
 
 class CreateReview extends StatefulWidget {
-
+  final User user;
   final Restaurant? restaurant;
   final Food? food;
 
-  const CreateReview._({this.restaurant, this.food, Key? key}) : super(key: key);
+  const CreateReview.forRestaurant({
+    required this.user,
+    required Restaurant restaurant,
+    Key? key,
+  })  : restaurant = restaurant,
+        food = null,
+        super(key: key);
 
-  const CreateReview.forRestaurant(Restaurant restaurant, {Key? key})
-      : this._(restaurant: restaurant, key: key);
+  const CreateReview.forFood({
+    required this.user,
+    required Food food,
+    Key? key,
+  })  : food = food,
+        restaurant = null,
+        super(key: key);
 
-  const CreateReview.forFood(Food food, {Key? key})
-      : this._(food: food, key: key);
 
   @override
   State<CreateReview> createState() => _CreateReviewState();
@@ -30,8 +40,7 @@ class _CreateReviewState extends State<CreateReview> {
 
     final title = isFood ? widget.food!.getName() : widget.restaurant!
         .getName();
-    final subtitle = isFood ? widget.food!
-        .getName() /*NEED THE RESTAURANT NAME*/ : widget.restaurant!
+    final subtitle = isFood ? widget.food!.getName() /*NEED THE RESTAURANT NAME OF THE FOOD*/ : widget.restaurant!
         .getLocation();
     final imageUrl = isFood ? widget.food!.getImage() : widget.restaurant!
         .getImage();

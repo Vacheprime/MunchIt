@@ -19,11 +19,6 @@ class _HomepageState extends State<Homepage> {
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         title: Text("Munch't"),
         centerTitle: true,
-        actions: [
-          IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
-          }, icon: Icon(Icons.settings))
-        ],
       ),
       body: Center(
         child: Column(

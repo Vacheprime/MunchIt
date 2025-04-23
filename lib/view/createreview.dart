@@ -55,7 +55,7 @@ class _CreateReviewState extends State<CreateReview> {
           ),
           const SizedBox(height: 10),
           Row(
-            children: const [
+            children: const [ //generate ratings
               Icon(Icons.star, color: Colors.amber),
               Icon(Icons.star, color: Colors.amber),
               Icon(Icons.star, color: Colors.amber),

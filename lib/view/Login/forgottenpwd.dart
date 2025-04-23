@@ -9,6 +9,9 @@ class ForgottenPassword extends StatefulWidget {
 }
 
 class _ForgottenPasswordState extends State<ForgottenPassword> {
+
+  TextEditingController resetpassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +33,7 @@ class _ForgottenPasswordState extends State<ForgottenPassword> {
           children: [
             Text("Reset Password"),
             TextField(
+              controller: resetpassword,
               decoration: InputDecoration(
                 hintText: "Email or Phone Number"
               ),

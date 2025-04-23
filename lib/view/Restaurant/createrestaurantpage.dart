@@ -20,7 +20,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
 
   @override
   Widget build(BuildContext context) {
-    final pinkColor = Colors.pink[200];
+    final pinkColor = Color.fromRGBO(248, 145, 145, 1);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),

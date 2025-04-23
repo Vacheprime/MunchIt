@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: TextField(
             onChanged: (value) {
               setState(() {
@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
             },
             decoration: InputDecoration(
               hintText: "Search",
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: Icon(Icons.search),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             ),
@@ -129,7 +129,7 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.pink[200]),
+              decoration: BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
               child: const Center(
                   child: Text("Options", style: TextStyle(fontSize: 24))),
             ),
@@ -152,22 +152,22 @@ class _MainPageState extends State<MainPage> {
               title: Text("• Settings"),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Settings()));
+                    MaterialPageRoute(builder: (context) => Settings.user(user: widget.user)));
               },
             ),
           ],
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.pink[200],
-        title: const Text("Munch't"),
+        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
+        title: Text("Munch't"),
         leading: IconButton(
-          icon: const Icon(Icons.menu),
+          icon: Icon(Icons.menu),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: Icon(Icons.filter_list),
             onPressed: () {
               // Dropdown box to be added here with the filtered (price and location?)
             },
@@ -175,7 +175,7 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: 300),
         transitionBuilder: (child, animation) {
           final inFromRight = _currentIndex > _previousIndex;
           final offsetAnimation = Tween<Offset>(
@@ -196,7 +196,7 @@ class _MainPageState extends State<MainPage> {
             });
           }
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Suggested"),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: "Following"),

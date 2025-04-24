@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/User.dart';
+import '../../model/user.dart';
 import '../settingspage.dart';
 import 'accountpage.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munchit/model/User.dart';
+import 'package:munchit/model/user.dart';
 import 'package:munchit/view/mainpage.dart';
 import 'package:munchit/view/settingspage.dart';
 
@@ -119,7 +119,7 @@ class _RegisterState extends State<Register> {
                     phone.text.isNotEmpty &&
                     confirm_password.text.isNotEmpty) {
                   if (password.text == confirm_password.text) {
-                    User user = new User(
+                    User user = new User.withPassword(
                         username.text, email.text, phone.text, password.text);
                     Navigator.push(
                         context,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/view/aboutuspage.dart';
 
-import '../model/User.dart';
+import '../model/user.dart';
 
 class Settings extends StatefulWidget {
   final User user;

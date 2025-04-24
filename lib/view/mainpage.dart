@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:munchit/model/Restaurant.dart';
-import 'package:munchit/model/User.dart';
+import 'package:munchit/model/restaurant.dart';
+import 'package:munchit/model/user.dart';
 import 'package:munchit/view/Restaurant/restaurantpage.dart';
 import 'package:munchit/view/UserDetails/accountpage.dart';
 import 'package:munchit/view/UserDetails/userstatspage.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:munchit/model/Restaurant.dart';
-import '../model/User.dart';
+import 'package:munchit/model/restaurant.dart';
+import '../model/user.dart';
 import '../model/food.dart';
 
 class CreateReview extends StatefulWidget {

@@ -9,20 +9,29 @@ class User {
   late String _userName;
   late String _email;
   late String _phone;
-  late String _passwordHash;
-  UserSettings settings = UserSettings(); // Make the settings public for easier access
   late List<Restaurant> _likedRestaurants;
   late List<Restaurant> _savedRestaurants;
   late List<Restaurant> _createdRestaurants;
   late List<Food> _createdFoods;
   late List<Review> _createdReviews;
+  UserSettings settings = UserSettings(); // Make the settings public for easier access
+  String? _passwordHash;
 
   /// Constructor used when creating a user that does not exist on the
   /// database.
   ///
   /// Throws [ArgumentError] if any of the provided arguments is of an
   /// incorrect format according to their respective validation methods.
-  User(String userName, String email, String phone, String password) {
+  User(String userName, String email, String phone) {
+    // Set all values
+    setUserName(userName);
+    setEmail(email);
+    setPhone(phone);
+    settings = UserSettings(); // Default settings
+    _savedRestaurants = List.empty();
+  }
+
+  User.withPassword(String userName, String email, String phone, String password) {
     // Set all values
     setUserName(userName);
     setEmail(email);
@@ -30,6 +39,24 @@ class User {
     setPasswordHash(password);
     settings = UserSettings(); // Default settings
     _savedRestaurants = List.empty();
+  }
+
+  factory User.fromFirebase(String docId, Map<String, dynamic> data) {
+    User user = User(data["username"], data["email"], data["phone"]);
+    // Set the password hash
+    user._passwordHash = data["passwordHash"];
+    // Set the document ID
+    user.setDocId(docId);
+    return user;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "username": _userName,
+      "email": _email,
+      "phone": _phone,
+      "passwordHash": _passwordHash
+    };
   }
 
   /// Getter for the user id.
@@ -116,7 +143,7 @@ class User {
     if (!validatePassword(password)) {
       throw ArgumentError("The password is invalid!");
     }
-    return BCrypt.checkpw(password, _passwordHash);
+    return BCrypt.checkpw(password, _passwordHash!);
   }
 
   /// Setter for a user's password.

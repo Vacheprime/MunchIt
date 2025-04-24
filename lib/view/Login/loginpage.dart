@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/view/Login/forgottenpwd.dart';
 import '../mainpage.dart';
-import '../settingspage.dart';
 
 
 class LoginPage extends StatefulWidget {

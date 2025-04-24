@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../model/User.dart';
+import '../../model/user.dart';
 import '../../model/food.dart';
 
 class FoodInfo extends StatefulWidget {

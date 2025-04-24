@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../model/Restaurant.dart';
-import '../../model/User.dart';
+import '../../model/restaurant.dart';
+import '../../model/user.dart';
 
 class RestaurantReviews extends StatefulWidget {
   final User user;

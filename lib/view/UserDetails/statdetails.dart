@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/User.dart';
+import '../../model/user.dart';
 
 class StatDetails extends StatefulWidget {
   final User user;

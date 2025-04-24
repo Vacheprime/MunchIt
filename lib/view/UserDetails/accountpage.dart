@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:munchit/view/UserDetails/changepasswordpage.dart';
 import 'package:munchit/view/UserDetails/userstatspage.dart';
 
-import '../../model/User.dart';
+import '../../model/user.dart';
 import '../settingspage.dart';
 
 class Account extends StatefulWidget {

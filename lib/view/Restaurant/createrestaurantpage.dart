@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munchit/model/User.dart';
+import 'package:munchit/model/user.dart';
 
 class CreateRestaurant extends StatefulWidget {
   final User user;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:munchit/model/Restaurant.dart';
-import 'package:munchit/model/User.dart';
+import 'package:munchit/model/restaurant.dart';
+import 'package:munchit/model/user.dart';
 
 class FollowingPage extends StatelessWidget {
   final User user;

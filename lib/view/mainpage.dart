@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/restaurant.dart';
 import 'package:munchit/model/user.dart';
+import 'package:munchit/view/Restaurant/restaurantpage.dart';
 import 'package:munchit/view/UserDetails/accountpage.dart';
 import 'package:munchit/view/UserDetails/userstatspage.dart';
 import 'package:munchit/view/settingspage.dart';
@@ -65,7 +66,11 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           Column(children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                //increase the like count of the restaurant
+                                //change the heart to a solid red one
+                                //add it to the user's like list
+                              },
                               icon: Icon(Icons.favorite_border),
                               iconSize: 16,
                             ),
@@ -75,7 +80,11 @@ class _MainPageState extends State<MainPage> {
                           SizedBox(width: 10),
                           Column(children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                //increase the save count of the restaurant
+                                //change the save to a solid yellow one
+                                //add it to the user's saved/favourite list
+                              },
                               icon: Icon(Icons.request_page),
                               iconSize: 16,
                             ),
@@ -85,7 +94,14 @@ class _MainPageState extends State<MainPage> {
                           SizedBox(width: 10),
                           Column(children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => RestaurantInfo(
+                                            user: widget.user,
+                                            restaurant: restaurant)));
+                              },
                               icon: Icon(Icons.comment),
                               iconSize: 16,
                             ),
@@ -119,8 +135,7 @@ class _MainPageState extends State<MainPage> {
     final List<Widget> _pages = [
       buildSuggestedPage(),
       FollowingPage(user: widget.user, key: const ValueKey("FollowingPage")),
-      CreateRestaurant(
-          user: widget.user, key: const ValueKey("CreateRestaurantPage")),
+      CreateRestaurant(user: widget.user, key: const ValueKey("CreateRestaurantPage")),
     ];
 
     return Scaffold(
@@ -129,14 +144,18 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
+              decoration:
+                  BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
               child: const Center(
                   child: Text("Options", style: TextStyle(fontSize: 24))),
             ),
             ListTile(
               title: Text("• Account"),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Account(user: widget.user)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Account(user: widget.user)));
               },
             ),
             ListTile(
@@ -151,8 +170,10 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               title: Text("• Settings"),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Settings.user(user: widget.user)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Settings(user: widget.user)));
               },
             ),
           ],
@@ -187,6 +208,7 @@ class _MainPageState extends State<MainPage> {
         child: _pages[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
           if (index != _currentIndex) {
@@ -198,8 +220,7 @@ class _MainPageState extends State<MainPage> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Suggested"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: "Following"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Following"),
           BottomNavigationBarItem(icon: Icon(Icons.add_box), label: "Create"),
         ],
       ),

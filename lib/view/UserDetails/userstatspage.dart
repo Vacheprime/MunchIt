@@ -24,7 +24,7 @@ class _StatsState extends State<Stats> {
             child: Column(
               children: [
                 DrawerHeader(
-                  decoration: BoxDecoration(color: Colors.pink[200]),
+                  decoration: BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
                   child: const Center(
                       child: Text("Options", style: TextStyle(fontSize: 24))),
                 ),
@@ -47,7 +47,7 @@ class _StatsState extends State<Stats> {
                   title: Text("• Settings"),
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
+                        MaterialPageRoute(builder: (context) => Settings(user: widget.user ,)));
                   },
                 ),
               ],

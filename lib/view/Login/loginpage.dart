@@ -29,19 +29,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
         title: const Text("Munch't"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Settings(),
-                ),
-              );
-            }, 
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -93,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   //if() {
 
                   //}
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user)));
                 },
                 child: const Text('Submit'),
               ),

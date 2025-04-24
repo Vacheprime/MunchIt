@@ -10,7 +10,8 @@ class ForgottenPassword extends StatefulWidget {
 
 class _ForgottenPasswordState extends State<ForgottenPassword> {
 
-  TextEditingController resetpassword = TextEditingController();
+  TextEditingController resetPassword = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +22,6 @@ class _ForgottenPasswordState extends State<ForgottenPassword> {
         }, icon: Icon(Icons.arrow_back)),
         centerTitle: true,
         title: Text("Munch't"),
-        actions: [
-          IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
-          }, icon: Icon(Icons.settings))
-        ],
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
       ),
       body: Center(
@@ -33,11 +29,13 @@ class _ForgottenPasswordState extends State<ForgottenPassword> {
           children: [
             Text("Reset Password"),
             TextField(
-              controller: resetpassword,
+              controller: resetPassword,
               decoration: InputDecoration(
                 hintText: "Email or Phone Number"
               ),
             ),
+            SizedBox(height: 35,),
+            ElevatedButton(onPressed: () { /*send the verification code and send to where the user can input the code*/ }, child: Text("Next", style: TextStyle(color: Color.fromRGBO(248, 145, 145, 1)),))
           ],
         ),
       ),

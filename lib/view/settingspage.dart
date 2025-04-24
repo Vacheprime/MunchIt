@@ -4,8 +4,9 @@ import 'package:munchit/view/aboutuspage.dart';
 import '../model/user.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
-  const Settings.user({required User user});
+  final User user;
+
+  const Settings({super.key, required this.user});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -103,7 +104,7 @@ class _SettingsState extends State<Settings> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutUs()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutUs(user: widget.user,)));
               },
               child: Text(
                 'About Us',

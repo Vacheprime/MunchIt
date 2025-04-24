@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../model/User.dart';
 
 class CreateFood extends StatefulWidget {
-  const CreateFood({super.key});
+  final User user;
+
+  const CreateFood({super.key, required this.user});
 
   @override
   State<CreateFood> createState() => _CreateFoodState();

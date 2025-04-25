@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/user.dart';
+import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
+import 'package:munchit/services/repositories/user_repository.dart';
 import 'package:munchit/view/mainpage.dart';
 
 class Register extends StatefulWidget {
@@ -151,7 +153,7 @@ class _RegisterState extends State<Register> {
     return isValid;
   }
 
-  void _registerUser() {
+  Future<void> _registerUser() async {
     //user creation
     // if (passwordController.text.isNotEmpty &&
     //     usernameController.text.isNotEmpty &&
@@ -185,14 +187,35 @@ class _RegisterState extends State<Register> {
     String password = passwordController.text;
     User user = User.withPassword(userName, email, phone, password);
 
-
+    UserRepository repository = UserRepository();
+    // Check if the username has been taken
+    if (await repository.isUserNameTaken(userName)) {
+      _showSnackBar("The username has already been taken!", 300);
+      return;
+    }
+    // Attempt to insert the user
+    try {
+      await repository.add(user);
+    } catch (e) {
+      if (e is FirestoreInsertException) {
+        _showSnackBar("Error inserting user: ${e.message}", 400);
+      } else {
+        // Rethrow exception that couldn't be handled.
+        rethrow;
+      }
+    }
+    // Go to main page
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MainPage(user)));
   }
 
   void _showSnackBar(String message, double width) {
-    ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(SnackBar(
-      content: Center( child: Text(message)),
-      width: width,
-      behavior: SnackBarBehavior.floating,
-    ));
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Center(child: Text(message)),
+        width: width,
+        behavior: SnackBarBehavior.floating,
+      ));
   }
 }

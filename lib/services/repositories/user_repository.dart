@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
-import 'package:munchit/services/firebase/firebasemanager.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
 
 final class UserRepository extends BaseRepository<UserRepository> {
   static const String collectionName = "users";
 
+  /// Default constructor.
   UserRepository(): super(collectionName);
 
-  UserRepository._fromFilter(Query<Map<String, dynamic>> query): super.fromFilter(collectionName, query);
+  /// Constructor used to create a clone from a filter.
+  UserRepository._fromFilter(RepositoryQuery query): super.fromFilter(collectionName, query);
 
+  /// Attempt to login a user using a [userName] and a [password].
   Future<User?> attemptLogin(String userName, String password) async {
     if (await this.withUserName(userName).count() != 1) {
       return null;
@@ -26,13 +27,24 @@ final class UserRepository extends BaseRepository<UserRepository> {
     return null;
   }
 
+  /// Filter users that have the given [userName].
   UserRepository withUserName(String userName) {
-    return applyTransform((Query<Map<String, dynamic>> query) {
+    return applyTransform((RepositoryQuery query) {
       return query.where("username", isEqualTo: userName);
     });
   }
 
+  /// Check if the username is already taken
+  Future<bool> isUserNameTaken(String userName) async {
+    // Get a new query
+    CollectionReference reference = firestore.collection(collectionName);
+    // Count query
+    AggregateQuerySnapshot snapshot = await reference.where("username", isEqualTo: userName).count().get();
+    // Return if exists
+    return snapshot.count! == 1;
+  }
 
+  /// Add the specified [user] into the database.
   Future<void> add(User user) async {
     // Get the collection reference
     CollectionReference reference = firestore.collection(collectionName);
@@ -46,6 +58,8 @@ final class UserRepository extends BaseRepository<UserRepository> {
     }
   }
 
+  /// Retrieve the results of the current query of the
+  /// UserRepository.
   @override
   Future<List<User>> retrieve() async {
     // Get the query
@@ -63,6 +77,7 @@ final class UserRepository extends BaseRepository<UserRepository> {
     return results;
   }
 
+  /// Clone the UserRepository.
   @override
   UserRepository clone(RepositoryQuery newQuery) {
     return UserRepository._fromFilter(newQuery);

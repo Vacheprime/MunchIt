@@ -128,11 +128,39 @@ class User {
     _phone = phone;
   }
 
+  /// Getter for the user's liked restaurants.
+  ///
+  /// Returns the list of the liked restaurants of the user.
+  List<Restaurant> getLikedRestaurants() {
+    return _likedRestaurants;
+  }
+
   /// Getter for the user's saved restaurants.
   ///
   /// Returns the list of the saved restaurants of the user.
   List<Restaurant> getSavedRestaurants() {
     return _savedRestaurants;
+  }
+
+  /// Getter for the user's created restaurants.
+  ///
+  /// Returns the list of the created restaurants of the user.
+  List<Restaurant> getCreatedRestaurants() {
+    return _createdRestaurants;
+  }
+
+  /// Getter for the user's created foods.
+  ///
+  /// Returns the list of the created foods of the user.
+  List<Food> getCreatedFoods() {
+    return _createdFoods;
+  }
+
+  /// Getter for the user's created reviews.
+  ///
+  /// Returns the list of the created reviews of the user.
+  List<Review> getCreatedReviews() {
+    return _createdReviews;
   }
 
   /// Compare a [password] with the current user's password.

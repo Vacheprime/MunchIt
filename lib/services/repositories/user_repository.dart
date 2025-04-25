@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
-
-import '../firebase/firebasemanager.dart';
 
 final class UserRepository extends BaseRepository<UserRepository> {
   static const String collectionName = "users";

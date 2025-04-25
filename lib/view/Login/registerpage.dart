@@ -119,18 +119,24 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  /// Toggle password visibility for password field.
   void _togglePassObscure() {
     setState(() {
       _isPassObscured = !_isPassObscured;
     });
   }
 
+  /// Toggle password visibility for confirm password field.
   void _toggleConfirmPassObscure() {
     setState(() {
       _isConfirmedPassObscured = !_isConfirmedPassObscured;
     });
   }
 
+  /// Validate field data.
+  /// This method shows snack bars indicating which fields are invalid.
+  ///
+  /// Returns a [bool] indicating whether the text fields all have valid data.
   bool _validateFieldData() {
     bool isValid = true;
     // Validate the password
@@ -153,30 +159,8 @@ class _RegisterState extends State<Register> {
     return isValid;
   }
 
+  /// Register a new user.
   Future<void> _registerUser() async {
-    //user creation
-    // if (passwordController.text.isNotEmpty &&
-    //     usernameController.text.isNotEmpty &&
-    //     emailController.text.isNotEmpty &&
-    //     phoneController.text.isNotEmpty &&
-    //     confirmPasswordController.text.isNotEmpty) {
-    //
-    //   if (passwordController.text == confirmPasswordController.text) {
-    //     User user = new User.withPassword(
-    //         usernameController.text,
-    //         emailController.text,
-    //         phoneController.text,
-    //         passwordController.text);
-    //     Navigator.push(
-    //         context, MaterialPageRoute(builder: (context) => MainPage(user)));
-    //   } else {
-    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //         content: Text("The password and confirm password do not match")));
-    //   }
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text("Cannot leave a text field empty")));
-    // }
     // Validate user input
     if (!_validateFieldData()) return;
 
@@ -209,6 +193,7 @@ class _RegisterState extends State<Register> {
         .push(MaterialPageRoute(builder: (context) => MainPage(user)));
   }
 
+  /// Show a SnackBar with a custom message and width.
   void _showSnackBar(String message, double width) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()

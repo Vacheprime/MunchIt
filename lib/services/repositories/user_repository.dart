@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
+
+import '../firebase/firebasemanager.dart';
 
 final class UserRepository extends BaseRepository<UserRepository> {
   static const String collectionName = "users";
@@ -10,7 +13,7 @@ final class UserRepository extends BaseRepository<UserRepository> {
   UserRepository(): super(collectionName);
 
   /// Constructor used to create a clone from a filter.
-  UserRepository._fromFilter(RepositoryQuery query): super.fromFilter(collectionName, query);
+  UserRepository._fromFilter(RepositoryQuery query, List<Transformation> transformations): super.fromFilter(collectionName, query, transformations);
 
   /// Attempt to login a user using a [userName] and a [password].
   Future<User?> attemptLogin(String userName, String password) async {
@@ -79,7 +82,7 @@ final class UserRepository extends BaseRepository<UserRepository> {
 
   /// Clone the UserRepository.
   @override
-  UserRepository clone(RepositoryQuery newQuery) {
-    return UserRepository._fromFilter(newQuery);
+  UserRepository clone(RepositoryQuery newQuery, List<Transformation> transformations) {
+    return UserRepository._fromFilter(newQuery, transformations);
   }
 }

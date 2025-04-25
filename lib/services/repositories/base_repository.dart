@@ -7,15 +7,16 @@ typedef RepositoryQuery = Query<Map<String, dynamic>>;
 abstract class BaseRepository<T extends BaseRepository<T>> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final String _collectionName;
-  final List<Transformation> _queryTransformations = [];
+  List<Transformation> _queryTransformations = [];
   late Query<Map<String, dynamic>> _query;
 
   BaseRepository(this._collectionName) {
     _query = firestore.collection(_collectionName);
   }
 
-  BaseRepository.fromFilter(this._collectionName, Query<Map<String, dynamic>> query) {
+  BaseRepository.fromFilter(this._collectionName, RepositoryQuery query, List<Transformation> transformations) {
     _query = query;
+    _queryTransformations = transformations;
   }
 
   Future<int> count() async {
@@ -36,11 +37,11 @@ abstract class BaseRepository<T extends BaseRepository<T>> {
   }
 
   T applyTransform(Transformation transform) {
-    Query<Map<String, dynamic>> newQuery = transform(_query);
+    RepositoryQuery newQuery = transform(_query);
     // Clone
-    BaseRepository<T> cloned = clone(newQuery);
+    BaseRepository<T> cloned = clone(newQuery, [..._queryTransformations]);
     // Add to transformations
-    _queryTransformations.add(transform);
+    cloned._queryTransformations.add(transform);
     // Return the new query
     return cloned as T;
   }
@@ -50,7 +51,7 @@ abstract class BaseRepository<T extends BaseRepository<T>> {
 
   /// Abstract clone method.
   /// Defines how subclasses are to be cloned.
-  T clone(RepositoryQuery newQuery);
+  T clone(RepositoryQuery newQuery, List<Transformation> transformations);
 
 
 }

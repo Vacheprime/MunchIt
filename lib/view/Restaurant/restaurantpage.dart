@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../model/restaurant.dart';
 import '../../model/user.dart';
 

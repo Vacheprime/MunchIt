@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/view/Login/forgottenpwd.dart';
+import '../../model/user.dart';
 import '../mainpage.dart';
-import '../settingspage.dart';
-
+import 'package:munchit/services/repositories/user_repository.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -75,12 +75,18 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: Color.fromRGBO(248, 145, 145, 1),
                   foregroundColor: Colors.black,
                 ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("The username and password does not match. Please try again!")));
-                  //if() {
-
-                  //}
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user)));
+                onPressed: () async {
+                  String username = _usernameController.text;
+                  String password = _passwordController.text;
+                  UserRepository ur = new UserRepository();
+                  User? user = await ur.attemptLogin(username, password);
+                  if (user == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            "The username and password does not match. Please try again!")));
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user)));
+                  }
                 },
                 child: const Text('Submit'),
               ),

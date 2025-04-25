@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:munchit/view/splashscreen.dart';
+import 'package:munchit/services/firebase/firebasemanager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseManager.initFirebase();
   runApp(MyApp());
 }
 

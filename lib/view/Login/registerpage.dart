@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/view/mainpage.dart';
-import 'package:munchit/view/settingspage.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -11,14 +10,16 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextEditingController username = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController confirm_password = TextEditingController();
+  // Text field controllers
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  // Obscure password fields
+  bool _isPassObscured = true;
+  bool _isConfirmedPassObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,113 +29,82 @@ class _RegisterState extends State<Register> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back)),
-        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
+            icon: const Icon(Icons.arrow_back)),
+        backgroundColor: const Color.fromRGBO(248, 145, 145, 1),
         centerTitle: true,
-        title: Text("Munch't"),
+        title: const Text("Munch't"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "Register",
               style: TextStyle(fontSize: 36),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             TextField(
-              controller: username,
-              decoration: InputDecoration(
+              controller: usernameController,
+              decoration: const InputDecoration(
                 labelText: 'Username',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
-              controller: email,
-              decoration: InputDecoration(
+              controller: emailController,
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
-              controller: phone,
-              decoration: InputDecoration(
+              controller: phoneController,
+              decoration: const InputDecoration(
                 labelText: 'Phone (xxx) xxx-xxxx',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
-              controller: password,
-              obscureText: _obscurePassword,
+              controller: passwordController,
+              obscureText: _isPassObscured,
               decoration: InputDecoration(
                 labelText: 'Password',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    _isPassObscured ? Icons.visibility_off : Icons.visibility,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
+                  onPressed: _togglePassObscure,
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
-              controller: confirm_password,
-              obscureText: _obscureConfirmPassword,
+              controller: confirmPasswordController,
+              obscureText: _isConfirmedPassObscured,
               decoration: InputDecoration(
                 labelText: 'Confirm Password',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscureConfirmPassword
+                    _isConfirmedPassObscured
                         ? Icons.visibility_off
                         : Icons.visibility,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureConfirmPassword = !_obscureConfirmPassword;
-                    });
-                  },
+                  onPressed: _toggleConfirmPassObscure,
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
-              onPressed: () {
-                //user creation
-                if (password.text.isNotEmpty &&
-                    username.text.isNotEmpty &&
-                    email.text.isNotEmpty &&
-                    phone.text.isNotEmpty &&
-                    confirm_password.text.isNotEmpty) {
-                  if (password.text == confirm_password.text) {
-                    User user = new User.withPassword(
-                        username.text, email.text, phone.text, password.text);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainPage(user)));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            "The password and confirm password do not match")));
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Cannot leave a text field empty")));
-                }
-              },
+              onPressed: _registerUser,
               child: Text("Register"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(248, 145, 145, 1),
@@ -145,5 +115,84 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
+  }
+
+  void _togglePassObscure() {
+    setState(() {
+      _isPassObscured = !_isPassObscured;
+    });
+  }
+
+  void _toggleConfirmPassObscure() {
+    setState(() {
+      _isConfirmedPassObscured = !_isConfirmedPassObscured;
+    });
+  }
+
+  bool _validateFieldData() {
+    bool isValid = true;
+    // Validate the password
+    if (!User.validateUserName(usernameController.text)) {
+      isValid = false;
+      _showSnackBar("The username must contain letters and digits only!", 350);
+    } else if (!User.validateEmail(emailController.text)) {
+      isValid = false;
+      _showSnackBar("The email entered is invalid!", 250);
+    } else if (!User.validatePhone(phoneController.text)) {
+      isValid = false;
+      _showSnackBar("The phone number must be of format (XXX) XXX-XXXX!", 300);
+    } else if (!User.validatePassword(passwordController.text)) {
+      isValid = false;
+      _showSnackBar("The password must contain at least 8 characters!", 350);
+    } else if (passwordController.text != confirmPasswordController.text) {
+      isValid = false;
+      _showSnackBar("The passwords do not match!", 225);
+    }
+    return isValid;
+  }
+
+  void _registerUser() {
+    //user creation
+    // if (passwordController.text.isNotEmpty &&
+    //     usernameController.text.isNotEmpty &&
+    //     emailController.text.isNotEmpty &&
+    //     phoneController.text.isNotEmpty &&
+    //     confirmPasswordController.text.isNotEmpty) {
+    //
+    //   if (passwordController.text == confirmPasswordController.text) {
+    //     User user = new User.withPassword(
+    //         usernameController.text,
+    //         emailController.text,
+    //         phoneController.text,
+    //         passwordController.text);
+    //     Navigator.push(
+    //         context, MaterialPageRoute(builder: (context) => MainPage(user)));
+    //   } else {
+    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //         content: Text("The password and confirm password do not match")));
+    //   }
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text("Cannot leave a text field empty")));
+    // }
+    // Validate user input
+    if (!_validateFieldData()) return;
+
+    // Create the user
+    String userName = usernameController.text;
+    String email = emailController.text;
+    String phone = phoneController.text;
+    String password = passwordController.text;
+    User user = User.withPassword(userName, email, phone, password);
+
+
+  }
+
+  void _showSnackBar(String message, double width) {
+    ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(SnackBar(
+      content: Center( child: Text(message)),
+      width: width,
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 }

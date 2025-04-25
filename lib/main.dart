@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:munchit/view/splashscreen.dart';
 import 'package:munchit/services/firebase/firebasemanager.dart';
@@ -6,7 +5,7 @@ import 'package:munchit/services/firebase/firebasemanager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseManager.initFirebase();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Splash(),
       debugShowCheckedModeBanner: false,
     );

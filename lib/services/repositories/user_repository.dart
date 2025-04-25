@@ -34,6 +34,16 @@ final class UserRepository extends BaseRepository<UserRepository> {
     });
   }
 
+  /// Check if the username is already taken
+  Future<bool> isUserNameTaken(String userName) async {
+    // Get a new query
+    CollectionReference reference = firestore.collection(collectionName);
+    // Count query
+    AggregateQuerySnapshot snapshot = await reference.where("username", isEqualTo: userName).count().get();
+    // Return if exists
+    return snapshot.count! == 1;
+  }
+
   /// Add the specified [user] into the database.
   Future<void> add(User user) async {
     // Get the collection reference

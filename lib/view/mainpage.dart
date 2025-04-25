@@ -42,6 +42,12 @@ class _MainPageState extends State<MainPage> {
               prefixIcon: Icon(Icons.search),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              suffixIcon: IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: () {
+                    // Dropdown box to be added here with the filtered (price and location?)
+                    // and change the colour when a filter is applied
+                  }),
             ),
           ),
         ),
@@ -135,7 +141,8 @@ class _MainPageState extends State<MainPage> {
     final List<Widget> _pages = [
       buildSuggestedPage(),
       FollowingPage(user: widget.user, key: const ValueKey("FollowingPage")),
-      CreateRestaurant(user: widget.user, key: const ValueKey("CreateRestaurantPage")),
+      CreateRestaurant(
+          user: widget.user, key: const ValueKey("CreateRestaurantPage")),
     ];
 
     return Scaffold(
@@ -182,18 +189,11 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         title: Text("Munch't"),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: () {
-              // Dropdown box to be added here with the filtered (price and location?)
-            },
-          ),
-        ],
       ),
       body: AnimatedSwitcher(
         duration: Duration(milliseconds: 300),
@@ -220,7 +220,8 @@ class _MainPageState extends State<MainPage> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Suggested"),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Following"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: "Following"),
           BottomNavigationBarItem(icon: Icon(Icons.add_box), label: "Create"),
         ],
       ),

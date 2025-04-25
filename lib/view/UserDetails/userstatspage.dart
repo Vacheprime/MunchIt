@@ -67,36 +67,41 @@ class _StatsState extends State<Stats> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Likes"),
+              Text("Likes", style: TextStyle(fontSize: 24),),
               IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
             ],
           ),
           SizedBox(height: 10,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Favourites"),
+              Text("Favourites", style: TextStyle(fontSize: 24),),
               IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
             ],
           ),
           SizedBox(height: 10,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Reviews"),
+              Text("Reviews", style: TextStyle(fontSize: 24),),
               IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
             ],
           ),
           SizedBox(height: 10,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Created Restaurants"),
+              Text("Created Restaurants", style: TextStyle(fontSize: 24),),
               IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
             ],
           ),
           SizedBox(height: 10,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Created Foods"),
+              Text("Created Foods", style: TextStyle(fontSize: 24),),
               IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
             ],
           ),

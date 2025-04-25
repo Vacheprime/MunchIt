@@ -71,10 +71,16 @@ class _ChangePasswordState extends State<ChangePassword> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         title: Text("Munch't"),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.of(context).pop();
+          }, icon: Icon(Icons.arrow_back))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),

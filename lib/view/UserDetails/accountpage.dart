@@ -16,11 +16,15 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
   bool isEditing = false;
 
   void initState() {
     super.initState();
     username = TextEditingController(text: widget.user.getUserName());
+    email = TextEditingController(text: widget.user.getEmail());
+    phone = TextEditingController(text: widget.user.getPhone());
   }
 
   @override
@@ -68,6 +72,7 @@ class _AccountState extends State<Account> {
       ),
 
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         leading: IconButton(onPressed: () {
               () => _scaffoldKey.currentState?.openDrawer();
         }, icon: Icon(Icons.menu)),
@@ -86,6 +91,45 @@ class _AccountState extends State<Account> {
         SizedBox(height: 20),
         Text("Account", style: TextStyle(fontSize: 24)),
         SizedBox(height: 15),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: email,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 25,),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: phone,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: "Phone Number",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 25,),
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -95,7 +139,7 @@ class _AccountState extends State<Account> {
                   controller: username,
                   readOnly: !isEditing,
                   decoration: InputDecoration(
-                    labelText: "${widget.user.getUserName()}",
+                    labelText: "Username",
                     border: OutlineInputBorder(),
                   ),
                 ),

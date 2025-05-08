@@ -28,6 +28,10 @@ class Restaurant {
     Restaurant restaurant = Restaurant(data["name"], data["location"],
         data["phone"], data["description"], data["imageUrl"]);
     restaurant.setDocId(docId);
+    restaurant._likes = data["likes"];
+    restaurant._saves = data["saves"];
+    restaurant._addAllReviews(data["reviews"]);
+    restaurant._addAllFoodItems(data["foodItems"]);
     return restaurant;
   }
 
@@ -108,6 +112,10 @@ class Restaurant {
     return _foodItems;
   }
 
+  void _addAllFoodItems(List<Food> foods) {
+    _foodItems.addAll(foods);
+  }
+
   void addFoodItem(Food food) {
     _foodItems.add(food);
   }
@@ -138,6 +146,10 @@ class Restaurant {
 
   List<Review> getReviews() {
     return _reviews;
+  }
+
+  void _addAllReviews(List<Review> reviews) {
+    _reviews.addAll(reviews);
   }
 
   void addReview(Review review) {

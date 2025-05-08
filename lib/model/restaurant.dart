@@ -11,18 +11,44 @@ class Restaurant {
   late String _location;
   late String _phone;
   late String _description;
-  late ImageProvider _image; // DATA TYPE TO BE DEFINED!
+  late String _imageUrl; // DATA TYPE TO BE DEFINED!
   int _likes = 0;
   int _saves = 0;
   final List<Food> _foodItems = [];
   final List<Review> _reviews = [];
 
-  Restaurant(String name, String location, String phone, String description, ImageProvider image) {
+  Restaurant(String name, String location, String phone, String description,
+      ImageProvider image) {
     setName(name);
     setLocation(location);
     setPhone(phone);
     setDescription(description);
     setImage(image);
+  }
+
+  factory Restaurant.fromFirebase(String docId, Map<String, dynamic> data) {
+    Restaurant restaurant = Restaurant(data["name"], data["location"],
+        data["phone"], data["description"], data["imageUrl"]);
+    restaurant.setDocId(docId);
+    return restaurant;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": _name,
+      "location": _location,
+      "phone": _phone,
+      "description": _description,
+      "imageUrl": _imageUrl,
+      "likes": _likes,
+      "saves": _saves,
+      "foodItems": _foodItems
+          .where((Food food) => food.getDocId() != null)
+          .map((Food food) => food.getDocId()),
+      "reviews": _reviews
+          .where((Review review) => review.getDocId() != null)
+          .map((Review review) => review.getDocId())
+    };
   }
 
   String? getDocId() {
@@ -47,7 +73,8 @@ class Restaurant {
   }
 
   void setLocation(String location) {
-    if (!validateLocation(location)) throw ArgumentError("The location is invalid!");
+    if (!validateLocation(location))
+      throw ArgumentError("The location is invalid!");
     _location = location;
   }
 
@@ -56,7 +83,8 @@ class Restaurant {
   }
 
   void setPhone(String phone) {
-    if (!validatePhone(phone)) throw ArgumentError("The phone number is invalid!");
+    if (!validatePhone(phone))
+      throw ArgumentError("The phone number is invalid!");
     _phone = phone;
   }
 
@@ -65,16 +93,17 @@ class Restaurant {
   }
 
   void setDescription(String description) {
-    if (!validateDescription(description)) throw ArgumentError("The description is invalid");
+    if (!validateDescription(description))
+      throw ArgumentError("The description is invalid");
     _description = description;
   }
 
   ImageProvider getImage() {
-    return _image;
+    return _imageUrl;
   }
 
   void setImage(ImageProvider image) {
-    _image = image;
+    _imageUrl = image;
   }
 
   List<Food> getFoodItems() {
@@ -122,7 +151,10 @@ class Restaurant {
   }
 
   double getRating() {
-    return _reviews.map((review) => review.getRating()).reduce((r1, r2) => r1 + r2) / _reviews.length;
+    return _reviews
+            .map((review) => review.getRating())
+            .reduce((r1, r2) => r1 + r2) /
+        _reviews.length;
   }
 
   static bool validateName(String name) {
@@ -139,7 +171,8 @@ class Restaurant {
 
   static bool validateDescription(String description) {
     if (Utils.hasInvalidSpaces(description)) return false;
-    RegExp validDescriptionRegex = RegExp("^[\\p{L}0-9()\\[\\]{}'\"]\$", unicode: true);
+    RegExp validDescriptionRegex =
+        RegExp("^[\\p{L}0-9()\\[\\]{}'\"]\$", unicode: true);
     return validDescriptionRegex.hasMatch(description);
   }
 

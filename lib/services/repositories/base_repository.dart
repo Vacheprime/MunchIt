@@ -36,7 +36,7 @@ abstract class BaseRepository<T extends BaseRepository<T>> {
     return clonedQuery;
   }
 
-  CollectionReference getCollectionReference() {
+  CollectionReference<Map<String, dynamic>> getCollectionReference() {
     return firestore.collection(_collectionName);
   }
 

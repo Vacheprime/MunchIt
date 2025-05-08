@@ -56,7 +56,7 @@ class Review {
 
   static bool validateReviewContent(String reviewContent) {
     if (Utils.hasInvalidSpaces(reviewContent)) return false;
-    RegExp validContentRegex = RegExp("^[\\p{L}0-9()\\[\\]{}'\"]\$", unicode: true);
+    RegExp validContentRegex = RegExp("^[\\s\\p{L}0-9()\\[\\]{}'.\"]+\$", unicode: true);
     return validContentRegex.hasMatch(reviewContent);
   }
 }

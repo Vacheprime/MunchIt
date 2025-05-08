@@ -53,7 +53,7 @@ final class UserRepository extends BaseRepository<UserRepository> {
       DocumentReference ref = await reference.add(user.toMap());
       user.setDocId(ref.id);
     } catch (e) {
-      throw FirestoreInsertException("An error occured during the insertion"
+      throw FirestoreInsertException("An error occurred during the insertion"
           "of the user.", e);
     }
   }

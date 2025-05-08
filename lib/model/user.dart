@@ -44,11 +44,11 @@ class User {
     setPhone(phone);
     setPasswordHash(password);
     settings = UserSettings(); // Default settings
-    _likedRestaurants = List.empty();
-    _savedRestaurants = List.empty();
-    _createdRestaurants = List.empty();
-    _createdFoods = List.empty();
-    _createdReviews = List.empty();
+    _likedRestaurants = [];
+    _savedRestaurants = [];
+    _createdRestaurants = [];
+    _createdFoods = [];
+    _createdReviews = [];
   }
 
   factory User.fromFirebase(String docId, Map<String, dynamic> data) => User(

@@ -4,7 +4,7 @@ import 'food.dart';
 import 'package:munchit/services/utils/utils.dart';
 import 'package:munchit/model/review.dart';
 
-/// Restaurant class os used to represent a restaurant in the application.
+/// Restaurant class is used to represent a restaurant in the application.
 class Restaurant {
   String? _docId;
   late String _name;

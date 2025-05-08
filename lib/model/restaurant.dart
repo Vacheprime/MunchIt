@@ -169,7 +169,7 @@ class Restaurant {
 
   static bool validateName(String name) {
     if (Utils.hasInvalidSpaces(name)) return false;
-    RegExp validNameRegex = RegExp(r"^[\p{L} ]+$", unicode: true);
+    RegExp validNameRegex = RegExp(r"^[\p{L}\d ]+$", unicode: true);
     return validNameRegex.hasMatch(name);
   }
 
@@ -182,7 +182,7 @@ class Restaurant {
   static bool validateDescription(String description) {
     if (Utils.hasInvalidSpaces(description)) return false;
     RegExp validDescriptionRegex =
-        RegExp("^[\\p{L}0-9()\\[\\]{}'\"]\$", unicode: true);
+        RegExp("^[\\s\\p{L}0-9()\\[\\]{}'.\"]+\$", unicode: true);
     return validDescriptionRegex.hasMatch(description);
   }
 

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import 'food.dart';
 import 'package:munchit/services/utils/utils.dart';
 import 'package:munchit/model/review.dart';
@@ -18,12 +16,12 @@ class Restaurant {
   final List<Review> _reviews = [];
 
   Restaurant(String name, String location, String phone, String description,
-      ImageProvider image) {
+      String image) {
     setName(name);
     setLocation(location);
     setPhone(phone);
     setDescription(description);
-    setImage(image);
+    setImageUrl(image);
   }
 
   factory Restaurant.fromFirebase(String docId, Map<String, dynamic> data) {
@@ -98,11 +96,11 @@ class Restaurant {
     _description = description;
   }
 
-  ImageProvider getImage() {
+  String getImageUrl() {
     return _imageUrl;
   }
 
-  void setImage(ImageProvider image) {
+  void setImageUrl(String image) {
     _imageUrl = image;
   }
 

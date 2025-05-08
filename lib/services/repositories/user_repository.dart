@@ -30,6 +30,22 @@ final class UserRepository extends BaseRepository<UserRepository> {
     return null;
   }
 
+  Future<User?> getLoggedInUser() async{
+    /*
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc('someUserId')
+        .get();
+
+    if (userDoc.exists) {
+      return User.fromFirebase(userDoc.id, userDoc.data()!);
+    }
+
+    return null;
+
+     */
+  }
+
   /// Filter users that have the given [userName].
   UserRepository withUserName(String userName) {
     return applyTransform((RepositoryQuery query) {

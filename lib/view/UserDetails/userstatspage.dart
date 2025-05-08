@@ -20,47 +20,10 @@ class _StatsState extends State<Stats> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         leading: IconButton(onPressed: () {
-          Drawer(
-            child: Column(
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
-                  child: const Center(
-                      child: Text("Options", style: TextStyle(fontSize: 24))),
-                ),
-                ListTile(
-                  title: Text("• Account"),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Account(user: widget.user)));
-                  },
-                ),
-                ListTile(
-                  title: Text("• Your Stats"),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Stats(user: widget.user)));
-                  },
-                ),
-                ListTile(
-                  title: Text("• Settings"),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings(user: widget.user ,)));
-                  },
-                ),
-              ],
-            ),
-          );
-        }, icon: Icon(Icons.menu)),
+          Navigator.of(context).pop();
+        }, icon: Icon(Icons.arrow_back)),
         title: Text("Munch't"),
         centerTitle: true,
-        actions: [
-          IconButton(onPressed: () {
-            Navigator.of(context).pop();
-          }, icon: Icon(Icons.arrow_back_outlined))
-        ],
       ),
       body: Center(
       child: Column(

@@ -12,4 +12,5 @@ class FirebaseManager {
             messagingSenderId: "461033269569",
             projectId: "munchit-967bf"));
   }
+
 }

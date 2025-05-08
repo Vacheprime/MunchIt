@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:munchit/model/review.dart';
-import 'package:munchit/model/user.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
 
@@ -49,5 +48,4 @@ final class ReviewRepository extends BaseRepository<ReviewRepository> {
   clone(RepositoryQuery newQuery, List<Transformation> transformations) {
     return ReviewRepository._fromFilter(newQuery, transformations);
   }
-
 }

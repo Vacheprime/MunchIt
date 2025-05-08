@@ -33,7 +33,7 @@ class FollowingPage extends StatelessWidget {
                   leading: Container(
                     width: 60,
                     height: 60,
-                    child: Image(image: restaurant.getImage()), // Placeholder for image
+                    child: Image.network(restaurant.getImageUrl()), // Placeholder for image
                   ),
                   title: Text(restaurant.getName()),
                   subtitle: Column(

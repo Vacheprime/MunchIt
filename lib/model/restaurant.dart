@@ -1,28 +1,56 @@
-import 'package:flutter/cupertino.dart';
-
 import 'food.dart';
 import 'package:munchit/services/utils/utils.dart';
 import 'package:munchit/model/review.dart';
 
-/// Restaurant class os used to represent a restaurant in the application.
+/// Restaurant class is used to represent a restaurant in the application.
 class Restaurant {
   String? _docId;
   late String _name;
   late String _location;
   late String _phone;
   late String _description;
-  late ImageProvider _image; // DATA TYPE TO BE DEFINED!
+  late String _imageUrl; // DATA TYPE TO BE DEFINED!
   int _likes = 0;
   int _saves = 0;
   final List<Food> _foodItems = [];
   final List<Review> _reviews = [];
 
-  Restaurant(String name, String location, String phone, String description, ImageProvider image) {
+  Restaurant(String name, String location, String phone, String description,
+      String image) {
     setName(name);
     setLocation(location);
     setPhone(phone);
     setDescription(description);
-    setImage(image);
+    setImageUrl(image);
+  }
+
+  factory Restaurant.fromFirebase(String docId, Map<String, dynamic> data) {
+    Restaurant restaurant = Restaurant(data["name"], data["location"],
+        data["phone"], data["description"], data["imageUrl"]);
+    restaurant.setDocId(docId);
+    restaurant._likes = data["likes"];
+    restaurant._saves = data["saves"];
+    restaurant._addAllReviews(data["reviews"]);
+    restaurant._addAllFoodItems(data["foodItems"]);
+    return restaurant;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": _name,
+      "location": _location,
+      "phone": _phone,
+      "description": _description,
+      "imageUrl": _imageUrl,
+      "likes": _likes,
+      "saves": _saves,
+      "foodItems": _foodItems
+          .where((Food food) => food.getDocId() != null)
+          .map((Food food) => food.getDocId()),
+      "reviews": _reviews
+          .where((Review review) => review.getDocId() != null)
+          .map((Review review) => review.getDocId())
+    };
   }
 
   String? getDocId() {
@@ -47,7 +75,8 @@ class Restaurant {
   }
 
   void setLocation(String location) {
-    if (!validateLocation(location)) throw ArgumentError("The location is invalid!");
+    if (!validateLocation(location))
+      throw ArgumentError("The location is invalid!");
     _location = location;
   }
 
@@ -56,7 +85,8 @@ class Restaurant {
   }
 
   void setPhone(String phone) {
-    if (!validatePhone(phone)) throw ArgumentError("The phone number is invalid!");
+    if (!validatePhone(phone))
+      throw ArgumentError("The phone number is invalid!");
     _phone = phone;
   }
 
@@ -65,20 +95,25 @@ class Restaurant {
   }
 
   void setDescription(String description) {
-    if (!validateDescription(description)) throw ArgumentError("The description is invalid");
+    if (!validateDescription(description))
+      throw ArgumentError("The description is invalid");
     _description = description;
   }
 
-  ImageProvider getImage() {
-    return _image;
+  String getImageUrl() {
+    return _imageUrl;
   }
 
-  void setImage(ImageProvider image) {
-    _image = image;
+  void setImageUrl(String image) {
+    _imageUrl = image;
   }
 
   List<Food> getFoodItems() {
     return _foodItems;
+  }
+
+  void _addAllFoodItems(List<Food> foods) {
+    _foodItems.addAll(foods);
   }
 
   void addFoodItem(Food food) {
@@ -113,6 +148,10 @@ class Restaurant {
     return _reviews;
   }
 
+  void _addAllReviews(List<Review> reviews) {
+    _reviews.addAll(reviews);
+  }
+
   void addReview(Review review) {
     _reviews.add(review);
   }
@@ -122,12 +161,15 @@ class Restaurant {
   }
 
   double getRating() {
-    return _reviews.map((review) => review.getRating()).reduce((r1, r2) => r1 + r2) / _reviews.length;
+    return _reviews
+            .map((review) => review.getRating())
+            .reduce((r1, r2) => r1 + r2) /
+        _reviews.length;
   }
 
   static bool validateName(String name) {
     if (Utils.hasInvalidSpaces(name)) return false;
-    RegExp validNameRegex = RegExp(r"^[\p{L} ]+$", unicode: true);
+    RegExp validNameRegex = RegExp(r"^[\p{L}\d ]+$", unicode: true);
     return validNameRegex.hasMatch(name);
   }
 
@@ -139,7 +181,8 @@ class Restaurant {
 
   static bool validateDescription(String description) {
     if (Utils.hasInvalidSpaces(description)) return false;
-    RegExp validDescriptionRegex = RegExp("^[\\p{L}0-9()\\[\\]{}'\"]\$", unicode: true);
+    RegExp validDescriptionRegex =
+        RegExp("^[\\s\\p{L}0-9()\\[\\]{}'.\"]+\$", unicode: true);
     return validDescriptionRegex.hasMatch(description);
   }
 

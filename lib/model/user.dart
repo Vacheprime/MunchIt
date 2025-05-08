@@ -14,48 +14,79 @@ class User {
   late List<Restaurant> _createdRestaurants;
   late List<Food> _createdFoods;
   late List<Review> _createdReviews;
-  UserSettings settings = UserSettings(); // Make the settings public for easier access
+  UserSettings settings =
+      UserSettings(); // Make the settings public for easier access
   String? _passwordHash;
+
+  User._(
+      this._docId,
+      this._userName,
+      this._email,
+      this._phone,
+      this._likedRestaurants,
+      this._savedRestaurants,
+      this._createdRestaurants,
+      this._createdFoods,
+      this._createdReviews,
+      this.settings,
+      this._passwordHash);
 
   /// Constructor used when creating a user that does not exist on the
   /// database.
   ///
   /// Throws [ArgumentError] if any of the provided arguments is of an
   /// incorrect format according to their respective validation methods.
-  User(String userName, String email, String phone) {
-    // Set all values
-    setUserName(userName);
-    setEmail(email);
-    setPhone(phone);
-    settings = UserSettings(); // Default settings
-    _savedRestaurants = List.empty();
-  }
-
-  User.withPassword(String userName, String email, String phone, String password) {
+  User.withPassword(
+      String userName, String email, String phone, String password) {
     // Set all values
     setUserName(userName);
     setEmail(email);
     setPhone(phone);
     setPasswordHash(password);
     settings = UserSettings(); // Default settings
-    _savedRestaurants = List.empty();
+    _likedRestaurants = [];
+    _savedRestaurants = [];
+    _createdRestaurants = [];
+    _createdFoods = [];
+    _createdReviews = [];
   }
 
-  factory User.fromFirebase(String docId, Map<String, dynamic> data) {
-    User user = User(data["username"], data["email"], data["phone"]);
-    // Set the password hash
-    user._passwordHash = data["passwordHash"];
-    // Set the document ID
-    user.setDocId(docId);
-    return user;
-  }
+  factory User.fromFirebase(String docId, Map<String, dynamic> data) => User._(
+      docId,
+      data["username"],
+      data["email"],
+      data["phone"],
+      data["likedRestaurants"],
+      data["savedRestaurants"],
+      data["createdRestaurants"],
+      data["createdFoods"],
+      data["createdReviews"],
+      UserSettings.fromFirebase(data["settings"]),
+      data["passwordHash"]);
 
   Map<String, dynamic> toMap() {
+    // Convert associations into lists of IDs and store those.
     return {
       "username": _userName,
       "email": _email,
       "phone": _phone,
-      "passwordHash": _passwordHash
+      "likedRestaurants": _likedRestaurants
+          .where((Restaurant r) => r.getDocId() != null)
+          .map((Restaurant r) => r.getDocId()),
+      "savedRestaurants": _savedRestaurants
+          .where((Restaurant r) => r.getDocId() != null)
+          .map((Restaurant r) => r.getDocId()),
+      "createdRestaurants": _createdRestaurants
+          .where((Restaurant r) => r.getDocId() != null)
+          .map((Restaurant r) => r.getDocId()),
+      "createdFoods": _createdFoods
+          .where((Food f) => f.getDocId() != null)
+          .map((Food f) => f.getDocId()),
+      "createdReviews": _createdReviews
+          .where((Review r) => r.getDocId() != null)
+          .map((Review r) => r.getDocId()),
+      "settings": settings.toMap(),
+      "passwordHash": _passwordHash,
     };
   }
 
@@ -128,11 +159,59 @@ class User {
     _phone = phone;
   }
 
+  void addLikedRestaurant(Restaurant restaurant) {
+    _likedRestaurants.add(restaurant);
+  }
+
+  /// Getter for the user's liked restaurants.
+  ///
+  /// Returns the list of the liked restaurants of the user.
+  List<Restaurant> getLikedRestaurants() {
+    return _likedRestaurants;
+  }
+
+  void addSavedRestaurant(Restaurant restaurant) {
+    _savedRestaurants.add(restaurant);
+  }
+
   /// Getter for the user's saved restaurants.
   ///
   /// Returns the list of the saved restaurants of the user.
   List<Restaurant> getSavedRestaurants() {
     return _savedRestaurants;
+  }
+
+  void addCreatedRestaurant(Restaurant restaurant) {
+    _createdRestaurants.add(restaurant);
+  }
+
+  /// Getter for the user's created restaurants.
+  ///
+  /// Returns the list of the created restaurants of the user.
+  List<Restaurant> getCreatedRestaurants() {
+    return _createdRestaurants;
+  }
+
+  void addCreatedFood(Food food) {
+    _createdFoods.add(food);
+  }
+
+  /// Getter for the user's created foods.
+  ///
+  /// Returns the list of the created foods of the user.
+  List<Food> getCreatedFoods() {
+    return _createdFoods;
+  }
+
+  void addCreatedReview(Review review) {
+    _createdReviews.add(review);
+  }
+
+  /// Getter for the user's created reviews.
+  ///
+  /// Returns the list of the created reviews of the user.
+  List<Review> getCreatedReviews() {
+    return _createdReviews;
   }
 
   /// Compare a [password] with the current user's password.
@@ -174,7 +253,8 @@ class User {
   /// Returns true if valid, false if not.
   static bool validateEmail(String email) {
     // Regex taken from https://html.spec.whatwg.org/multipage/input.html#e-mail-state-%28type=email%29
-    RegExp regex = RegExp(r"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+    RegExp regex = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
     return regex.hasMatch(email);
   }
 
@@ -205,10 +285,26 @@ class UserSettings {
   late bool _enabledLocationServices;
 
   /// Default constructor that can accept any settings.
-  UserSettings({bool isDarkMode = false, bool enabledNotifications = false, bool enabledLocation = false}) {
+  UserSettings(
+      {bool isDarkMode = false,
+      bool enabledNotifications = false,
+      bool enabledLocation = false}) {
     _isDarkMode = isDarkMode;
     _enabledNotifications = enabledNotifications;
     _enabledLocationServices = enabledLocation;
+  }
+
+  factory UserSettings.fromFirebase(Map<String, dynamic> data) => UserSettings(
+      isDarkMode: data["isDarkMode"],
+      enabledNotifications: data["enabledNotifications"],
+      enabledLocation: data["enabledLocationServices"]);
+
+  Map<String, bool> toMap() {
+    return {
+      "isDarkMode": _isDarkMode,
+      "enabledNotifications": _enabledNotifications,
+      "enabledLocationServices": _enabledLocationServices
+    };
   }
 
   /// Toggle dark mode from true to false and vice versa.

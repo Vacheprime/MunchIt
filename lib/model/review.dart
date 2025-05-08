@@ -11,6 +11,19 @@ class Review {
     setReviewContent(reviewContent);
   }
 
+  factory Review.fromFirebase(String docId, Map<String, dynamic> data) {
+    Review review = new Review(data["rating"], data["reviewContent"]);
+    review.setDocId(docId);
+    return review;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "rating": _rating,
+      "reviewContent": _reviewContent
+    };
+  }
+
   String? getDocId() {
     return _docId;
   }
@@ -43,7 +56,7 @@ class Review {
 
   static bool validateReviewContent(String reviewContent) {
     if (Utils.hasInvalidSpaces(reviewContent)) return false;
-    RegExp validContentRegex = RegExp("^[\\p{L}0-9()\\[\\]{}'\"]\$", unicode: true);
+    RegExp validContentRegex = RegExp("^[\\s\\p{L}0-9()\\[\\]{}'.\"]+\$", unicode: true);
     return validContentRegex.hasMatch(reviewContent);
   }
 }

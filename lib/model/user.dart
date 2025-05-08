@@ -18,7 +18,7 @@ class User {
       UserSettings(); // Make the settings public for easier access
   String? _passwordHash;
 
-  User(
+  User._(
       this._docId,
       this._userName,
       this._email,
@@ -51,7 +51,7 @@ class User {
     _createdReviews = [];
   }
 
-  factory User.fromFirebase(String docId, Map<String, dynamic> data) => User(
+  factory User.fromFirebase(String docId, Map<String, dynamic> data) => User._(
       docId,
       data["username"],
       data["email"],
@@ -159,11 +159,19 @@ class User {
     _phone = phone;
   }
 
+  void addLikedRestaurant(Restaurant restaurant) {
+    _likedRestaurants.add(restaurant);
+  }
+
   /// Getter for the user's liked restaurants.
   ///
   /// Returns the list of the liked restaurants of the user.
   List<Restaurant> getLikedRestaurants() {
     return _likedRestaurants;
+  }
+
+  void addSavedRestaurant(Restaurant restaurant) {
+    _savedRestaurants.add(restaurant);
   }
 
   /// Getter for the user's saved restaurants.
@@ -173,6 +181,10 @@ class User {
     return _savedRestaurants;
   }
 
+  void addCreatedRestaurant(Restaurant restaurant) {
+    _createdRestaurants.add(restaurant);
+  }
+
   /// Getter for the user's created restaurants.
   ///
   /// Returns the list of the created restaurants of the user.
@@ -180,11 +192,19 @@ class User {
     return _createdRestaurants;
   }
 
+  void addCreatedFood(Food food) {
+    _createdFoods.add(food);
+  }
+
   /// Getter for the user's created foods.
   ///
   /// Returns the list of the created foods of the user.
   List<Food> getCreatedFoods() {
     return _createdFoods;
+  }
+
+  void addCreatedReview(Review review) {
+    _createdReviews.add(review);
   }
 
   /// Getter for the user's created reviews.

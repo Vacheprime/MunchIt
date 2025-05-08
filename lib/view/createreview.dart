@@ -42,7 +42,7 @@ class _CreateReviewState extends State<CreateReview> {
         .getName();
     final subtitle = isFood ? widget.food!.getName() /*NEED THE RESTAURANT NAME OF THE FOOD*/ : widget.restaurant!
         .getLocation();
-    final imageUrl = isFood ? widget.food!.getImage() : widget.restaurant!
+    final imageUrl = isFood ? widget.food!.getImageUrl() : widget.restaurant!
         .getImageUrl();
 
     return Padding(
@@ -59,7 +59,7 @@ class _CreateReviewState extends State<CreateReview> {
                 ),
               ),
               if (imageUrl != null)
-                Image.network(imageUrl as String, height: 80, width: 80, fit: BoxFit.cover),
+                Image.network(imageUrl, height: 80, width: 80, fit: BoxFit.cover),
             ],
           ),
           const SizedBox(height: 10),

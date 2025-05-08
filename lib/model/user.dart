@@ -61,7 +61,7 @@ class User {
       data["createdRestaurants"],
       data["createdFoods"],
       data["createdReviews"],
-      data["settings"],
+      UserSettings.fromFirebase(data["settings"]),
       data["passwordHash"]);
 
   Map<String, dynamic> toMap() {

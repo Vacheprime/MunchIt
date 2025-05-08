@@ -8,7 +8,7 @@
 .history
 .idea
 .idea/*
-/lib/services/api/google_places_api_key.json
+google_places_api_key.json
 
 # Flutter repo-specific
 /bin/cache/

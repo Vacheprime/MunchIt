@@ -62,7 +62,7 @@ class _MainPageState extends State<MainPage> {
                   leading: Container(
                       width: 60,
                       height: 60,
-                      child: Image(image: restaurant.getImage())),
+                      child: Image.network(restaurant.getImageUrl())),
                   title: Text('${restaurant.getName()}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

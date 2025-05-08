@@ -36,6 +36,10 @@ abstract class BaseRepository<T extends BaseRepository<T>> {
     return clonedQuery;
   }
 
+  CollectionReference<Map<String, dynamic>> getCollectionReference() {
+    return firestore.collection(_collectionName);
+  }
+
   T applyTransform(Transformation transform) {
     RepositoryQuery newQuery = transform(_query);
     // Clone
@@ -52,6 +56,4 @@ abstract class BaseRepository<T extends BaseRepository<T>> {
   /// Abstract clone method.
   /// Defines how subclasses are to be cloned.
   T clone(RepositoryQuery newQuery, List<Transformation> transformations);
-
-
 }

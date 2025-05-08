@@ -11,6 +11,19 @@ class Review {
     setReviewContent(reviewContent);
   }
 
+  factory Review.fromFirebase(String docId, Map<String, dynamic> data) {
+    Review review = new Review(data["rating"], data["reviewContent"]);
+    review.setDocId(docId);
+    return review;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "rating": _rating,
+      "reviewContent": _reviewContent
+    };
+  }
+
   String? getDocId() {
     return _docId;
   }

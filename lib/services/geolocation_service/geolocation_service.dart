@@ -1,3 +1,4 @@
+import 'package:flutter_google_maps_webservices/directions.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GeolocationService {
@@ -9,7 +10,6 @@ class GeolocationService {
     if (! await Geolocator.isLocationServiceEnabled()) {
       return false;
     }
-
     LocationPermission permission = await Geolocator.checkPermission();
     if (deniedPermissions.contains(permission)) {
       return false;
@@ -32,5 +32,13 @@ class GeolocationService {
     return allowedPermission.contains(permission);
   }
 
-
+  static Future<Location> getCurrentLocation() async {
+    if (!await isLocationServicesAllowed()) {
+      throw StateError(
+          "Cannot get location: Location services aren't enabled or allowed.");
+    }
+    // Get the position and return it as a Google Places Location object.
+    Position pos = await Geolocator.getCurrentPosition();
+    return Location(lat: pos.latitude, lng: pos.longitude);
+  }
 }

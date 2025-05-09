@@ -9,10 +9,6 @@
 .idea
 .idea/*
 
-# Ignore google-services.json
-google-services.json
-
-
 # Flutter repo-specific
 /bin/cache/
 /bin/internal/bootstrap.bat

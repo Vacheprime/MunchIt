@@ -21,14 +21,18 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Discover New Restaurants"),
+            SizedBox(height: 10,),
             Image.network(""),
+            SizedBox(height: 10,),
             Text("Trattoria Bella Vita"),
             SizedBox(height: 10,),
             ElevatedButton(onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
             }, child: Text("Login"), ),
+            SizedBox(height: 20,),
             ElevatedButton(onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
             }, child: Text("Register"), ),

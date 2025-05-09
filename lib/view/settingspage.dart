@@ -85,38 +85,23 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
-
-            SizedBox(height: 20),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Location",  style: TextStyle(fontSize: 24)),
-                SizedBox(width: 20),
-                Checkbox(
-                  value: isLocation,
-                  onChanged: (value) {
-                    setState(() {
-                      isLocation = value!;
-                    });
-                  },
-                ),
-              ],
-            ),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutUs(user: widget.user,)));
               },
-              child: Text(
+              child: const Text(
                 'About Us',
                 style: TextStyle(
+                  fontSize: 24,
                   color: Colors.black,
+                  decoration: TextDecoration.underline,
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             ElevatedButton(onPressed: () {
               //save functionality
-            }, child: Text("Save"))
+            }, child: const Text("Save", style: TextStyle(fontSize: 24, color: Color.fromRGBO(248, 145, 145, 1)),))
           ],
         ),
       ),

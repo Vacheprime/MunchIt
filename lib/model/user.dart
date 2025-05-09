@@ -124,7 +124,7 @@ class User {
   /// Getter for the user's email.
   ///
   /// Returns the email of the user.
-  String getEmail(String email) {
+  String getEmail() {
     return _email;
   }
 

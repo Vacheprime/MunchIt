@@ -19,6 +19,25 @@ final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
 
   RestaurantRepository._fromFilter(RepositoryQuery query, List<Transformation> transformations) : super.fromFilter(collectionName, query, transformations);
 
+  Future<List<Restaurant>> getRestaurantsWithFoodName(String foodName) async {
+    // Get all restaurants
+    CollectionReference collection = getCollectionReference();
+    QuerySnapshot snapshot = await collection.get();
+    List<DocumentSnapshot> docs = snapshot.docs;
+    List<Restaurant> restaurants = await _mapFromSnapshots(docs);
+    // Search restaurant foods
+    return restaurants.where((Restaurant restaurant) {
+      List<Food> foods = restaurant.getFoodItems();
+      for (Food food in foods) {
+        String searchStr = foodName.toLowerCase();
+        if (restaurant.getName().contains(searchStr) || food.getName().contains(searchStr)) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
+  }
+
   Stream<List<Restaurant>> getRestaurantsNearby(Geolocation geoLocation, double radius) {
     // Get collection
     CollectionReference collection = getCollectionReference();

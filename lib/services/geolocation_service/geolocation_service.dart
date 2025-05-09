@@ -1,5 +1,6 @@
 import 'package:flutter_google_maps_webservices/directions.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:munchit/services/geolocation_service/geolocation.dart';
 
 class GeolocationService {
   static const List<LocationPermission> deniedPermissions = [LocationPermission.denied, LocationPermission.deniedForever, LocationPermission.unableToDetermine];
@@ -32,13 +33,13 @@ class GeolocationService {
     return allowedPermission.contains(permission);
   }
 
-  static Future<Location> getCurrentLocation() async {
+  static Future<Geolocation> getCurrentLocation() async {
     if (!await isLocationServicesAllowed()) {
       throw StateError(
           "Cannot get location: Location services aren't enabled or allowed.");
     }
     // Get the position and return it as a Google Places Location object.
     Position pos = await Geolocator.getCurrentPosition();
-    return Location(lat: pos.latitude, lng: pos.longitude);
+    return Geolocation(lat: pos.latitude, long: pos.longitude);
   }
 }

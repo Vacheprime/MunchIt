@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_google_maps_webservices/places.dart';
+import 'package:munchit/services/geolocation_service/geolocation.dart';
 
 class PlacesApiService {
   static const String apiKeyFile = "google_places_api_key.json";
@@ -11,16 +12,22 @@ class PlacesApiService {
     _loadFromApiKeyFile();
   }
 
-  Future<List<PlacesSearchResult>> findRestaurantsNearby(Location location, int radius, {String? name, String? address}) async {
+  Future<List<PlacesSearchResult>> findRestaurantsNearby(
+      Geolocation location, int radius,
+      {String? name, String? address}) async {
     if (name == null && address == null) {
       throw ArgumentError("The name or the address must be specified.");
     }
     String query = address ?? name!;
-    return (await _places.searchNearbyWithRadius(location, radius, name: query, type: "restaurant")).results;
+    return (await _places.searchNearbyWithRadius(
+            Location(lat: location.lat, lng: location.long), radius,
+            name: query, type: "restaurant"))
+        .results;
   }
 
   Future<PlaceDetails?> getRestaurantDetails(String placeId) async {
-    PlacesDetailsResponse detailsResponse = await _places.getDetailsByPlaceId(placeId);
+    PlacesDetailsResponse detailsResponse =
+        await _places.getDetailsByPlaceId(placeId);
     if (detailsResponse.hasNoResults) {
       return null;
     }

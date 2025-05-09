@@ -1,14 +1,20 @@
-import 'package:flutter_google_maps_webservices/directions.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:munchit/services/geolocation_service/geolocation.dart';
 
 class GeolocationService {
-  static const List<LocationPermission> deniedPermissions = [LocationPermission.denied, LocationPermission.deniedForever, LocationPermission.unableToDetermine];
-  static const List<LocationPermission> allowedPermission = [LocationPermission.always, LocationPermission.whileInUse];
+  static const List<LocationPermission> deniedPermissions = [
+    LocationPermission.denied,
+    LocationPermission.deniedForever,
+    LocationPermission.unableToDetermine
+  ];
+  static const List<LocationPermission> allowedPermission = [
+    LocationPermission.always,
+    LocationPermission.whileInUse
+  ];
 
   static Future<bool> isLocationServicesAllowed() async {
     // Check if location service is allowed
-    if (! await Geolocator.isLocationServiceEnabled()) {
+    if (!await Geolocator.isLocationServiceEnabled()) {
       return false;
     }
     LocationPermission permission = await Geolocator.checkPermission();
@@ -20,7 +26,7 @@ class GeolocationService {
 
   static Future<bool> requestLocationPermissions() async {
     // Check if location service is enabled
-    if (! await Geolocator.isLocationServiceEnabled()) {
+    if (!await Geolocator.isLocationServiceEnabled()) {
       return false;
     }
     // Check if permission already granted

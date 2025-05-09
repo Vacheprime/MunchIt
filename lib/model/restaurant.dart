@@ -30,8 +30,13 @@ class Restaurant {
   }
 
   factory Restaurant.fromFirebase(String docId, Map<String, dynamic> data) {
-    Restaurant restaurant = Restaurant(data["name"], data["location"],
-        data["phone"], data["description"], data["imageUrl"], data["geoLocation"]);
+    Restaurant restaurant = Restaurant(
+        data["name"],
+        data["location"],
+        data["phone"],
+        data["description"],
+        data["imageUrl"],
+        data["geoLocation"]);
     restaurant.setDocId(docId);
     restaurant._likes = data["likes"];
     restaurant._saves = data["saves"];
@@ -87,7 +92,8 @@ class Restaurant {
   }
 
   Geolocation getGeoLocation() {
-    return Geolocation(lat: _geoLocation.latitude, long: _geoLocation.longitude);
+    return Geolocation(
+        lat: _geoLocation.latitude, long: _geoLocation.longitude);
   }
 
   void setGeoLocation(Geolocation geoLocation) {

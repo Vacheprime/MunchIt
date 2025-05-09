@@ -16,7 +16,6 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController current = TextEditingController();
   TextEditingController newPassword = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
@@ -28,59 +27,16 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      drawer: Drawer(
-        child: Column(
-          children: [
-            const DrawerHeader(
-              decoration:
-              BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
-              child: Center(
-                  child: Text("Options", style: TextStyle(fontSize: 24))),
-            ),
-            ListTile(
-              title: Text("• Account"),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Account(user: widget.user)));
-              },
-            ),
-            ListTile(
-              title: Text("• Your Stats"),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Stats(user: widget.user)));
-              },
-            ),
-            ListTile(
-              title: Text("• Settings"),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Settings(user: widget.user)));
-              },
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(248, 145, 145, 1),
         title: Text("Munch't"),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        actions: [
-          IconButton(onPressed: () {
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
             Navigator.of(context).pop();
-          }, icon: Icon(Icons.arrow_back))
-        ],
+          }
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),

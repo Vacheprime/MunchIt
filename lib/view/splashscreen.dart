@@ -1,9 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:munchit/model/user.dart';
+import 'package:munchit/services/repositories/user_repository.dart';
+import '../services/firebase/firebasemanager.dart';
 import 'Login/homepage.dart';
 
 class Splash extends StatefulWidget {
-  const Splash({super.key});
+  final Function(User) onUserLoaded;
+
+  const Splash({Key? key, required this.onUserLoaded}) : super(key: key);
 
   @override
   State<Splash> createState() => _SplashState();
@@ -15,11 +20,17 @@ class _SplashState extends State<Splash> {
     // TODO: implement initState
     super.initState();
 
-    Timer(
-        Duration(seconds: 4),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Homepage())));
-  }
+    Timer(const Duration(seconds: 4), () async {
+      UserRepository userRepository = new UserRepository();
+      User? user = await userRepository.getLoggedInUser();
+
+      widget.onUserLoaded(user!);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => Homepage(),
+      ));
+    }); }
 
   @override
   Widget build(BuildContext context) {

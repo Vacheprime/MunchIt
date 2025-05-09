@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/services/firebase/firebasemanager.dart';
+import 'package:munchit/services/repositories/user_repository.dart';
+import 'package:munchit/view/Login/homepage.dart';
+import 'package:munchit/view/Login/loginpage.dart';
 import 'package:munchit/view/mainpage.dart';
 import 'package:munchit/view/splashscreen.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -38,14 +41,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.light;
-  User? _currentUser;
 
-  /// Called by SplashScreen after loading the user from Firebase.
-  void _onUserLoaded(User user) {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void setTheme(ThemeMode mode) {
     setState(() {
-      _currentUser = user;
-      _themeMode =
-      user.settings.isDarkModeEnabled() ? ThemeMode.dark : ThemeMode.light;
+      _themeMode = mode;
     });
   }
 
@@ -57,9 +61,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark(),
       themeMode: _themeMode,
       debugShowCheckedModeBanner: false,
-      home: _currentUser == null
-          ? Splash(onUserLoaded: _onUserLoaded)
-          : MainPage(_currentUser!),
+      home: Splash(setThemeCallback: setTheme),
     );
   }
 }

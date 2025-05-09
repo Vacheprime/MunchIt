@@ -9,6 +9,7 @@
 .idea
 .idea/*
 google_places_api_key.json
+user_credentials.json
 
 # Flutter repo-specific
 /bin/cache/

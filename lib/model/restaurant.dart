@@ -100,6 +100,10 @@ class Restaurant {
         lat: _geoLocation.latitude, long: _geoLocation.longitude);
   }
 
+  double getDistanceFromPosition(Geolocation geoLocation) {
+    return GeoFirePoint.distanceBetween(to: _geoLocation.coords, from: Coordinates(geoLocation.lat, geoLocation.long));
+  }
+
   void setGeoLocation(Geolocation geoLocation) {
     _geoLocation = GeoFirePoint(geoLocation.lat, geoLocation.long);
   }

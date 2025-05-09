@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:munchit/services/geolocation_service/geolocation.dart';
 
@@ -30,13 +31,16 @@ class Restaurant {
   }
 
   factory Restaurant.fromFirebase(String docId, Map<String, dynamic> data) {
+    // Get the geolocation
+    GeoPoint geoPoint = data["geoLocation"]["geopoint"];
+    Geolocation location = Geolocation(lat: geoPoint.latitude, long: geoPoint.longitude);
     Restaurant restaurant = Restaurant(
         data["name"],
-        data["location"],
+        data["address"],
         data["phone"],
         data["description"],
         data["imageUrl"],
-        data["geoLocation"]);
+        location);
     restaurant.setDocId(docId);
     restaurant._likes = data["likes"];
     restaurant._saves = data["saves"];
@@ -48,7 +52,7 @@ class Restaurant {
   Map<String, dynamic> toMap() {
     return {
       "name": _name,
-      "location": _address,
+      "address": _address,
       "phone": _phone,
       "description": _description,
       "imageUrl": _imageUrl,

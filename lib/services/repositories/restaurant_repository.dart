@@ -1,18 +1,39 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:munchit/model/food.dart';
 import 'package:munchit/model/restaurant.dart';
 import 'package:munchit/model/review.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
+import 'package:munchit/services/geolocation_service/geolocation.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
 import 'package:munchit/services/repositories/food_repository.dart';
 import 'package:munchit/services/repositories/review_repository.dart';
 
 final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
   static const String collectionName = "restaurants";
+  final GeoFlutterFire geo = GeoFlutterFire();
 
-  RestaurantRepository(): super(collectionName);
+  RestaurantRepository() : super(collectionName);
 
-  RestaurantRepository._fromFilter(RepositoryQuery query, List<Transformation> transformations): super.fromFilter(collectionName, query, transformations);
+  RestaurantRepository._fromFilter(RepositoryQuery query, List<Transformation> transformations) : super.fromFilter(collectionName, query, transformations);
+
+  Stream<List<Restaurant>> getRestaurantsNearby(Geolocation geoLocation, double radius) {
+    // Get collection
+    CollectionReference collection = getCollectionReference();
+    // Define the location field
+    String field = "geoLocation";
+    // Convert Geolocation to GeoFirePoint
+    GeoFirePoint point = GeoFirePoint(geoLocation.lat, geoLocation.long);
+    // Get the stream of documents
+    Stream<List<DocumentSnapshot>> documentStream = geo
+        .collection(collectionRef: collection)
+        .withinAsSingleStreamSubscription(
+            center: point, radius: radius, field: field);
+    // Map to restaurants
+    return documentStream.asyncMap(_mapFromSnapshots);
+  }
 
   Future<void> add(Restaurant restaurant) async {
     // Get the collection reference
@@ -22,8 +43,10 @@ final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
       DocumentReference ref = await collection.add(restaurant.toMap());
       restaurant.setDocId(ref.id);
     } catch (e) {
-      throw FirestoreInsertException("An error occurred during the insertion"
-          "of the restaurant.", e);
+      throw FirestoreInsertException(
+          "An error occurred during the insertion"
+          "of the restaurant.",
+          e);
     }
   }
 
@@ -36,7 +59,8 @@ final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
     return _mapFromSnapshots(docs);
   }
 
-  Future<List<Restaurant>> _mapFromSnapshots(List<DocumentSnapshot> docs) async {
+  Future<List<Restaurant>> _mapFromSnapshots(
+      List<DocumentSnapshot> docs) async {
     // Define the list of restaurants
     List<Restaurant> restaurants = [];
     for (DocumentSnapshot doc in docs) {
@@ -47,7 +71,6 @@ final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
       FoodRepository foodRepository = FoodRepository();
       List<String> foodItemIds = List<String>.from(data["foodItems"]);
       List<Food> foodItems = await foodRepository.getFromIds(foodItemIds);
-
       // Alter the data
       data["foodItems"] = foodItems;
 
@@ -65,7 +88,8 @@ final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
   }
 
   @override
-  RestaurantRepository clone(RepositoryQuery newQuery, List<Transformation> transformations) {
+  RestaurantRepository clone(
+      RepositoryQuery newQuery, List<Transformation> transformations) {
     return RestaurantRepository._fromFilter(newQuery, transformations);
   }
 

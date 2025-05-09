@@ -39,7 +39,7 @@ class FollowingPage extends StatelessWidget {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${restaurant.getLocation()}'),
+                      Text('${restaurant.getAddress()}'),
                       Row(
                         children: [
                           Column(

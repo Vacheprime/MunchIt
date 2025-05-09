@@ -41,7 +41,7 @@ class _CreateReviewState extends State<CreateReview> {
     final title = isFood ? widget.food!.getName() : widget.restaurant!
         .getName();
     final subtitle = isFood ? widget.food!.getName() /*NEED THE RESTAURANT NAME OF THE FOOD*/ : widget.restaurant!
-        .getLocation();
+        .getAddress();
     final imageUrl = isFood ? widget.food!.getImageUrl() : widget.restaurant!
         .getImageUrl();
 

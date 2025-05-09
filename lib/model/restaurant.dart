@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
+import 'package:munchit/services/geolocation_service/geolocation.dart';
+
 import 'food.dart';
 import 'package:munchit/services/utils/utils.dart';
 import 'package:munchit/model/review.dart';
@@ -6,7 +10,8 @@ import 'package:munchit/model/review.dart';
 class Restaurant {
   String? _docId;
   late String _name;
-  late String _location;
+  late String _address;
+  late GeoFirePoint _geoLocation;
   late String _phone;
   late String _description;
   late String _imageUrl; // DATA TYPE TO BE DEFINED!
@@ -15,18 +20,27 @@ class Restaurant {
   final List<Food> _foodItems = [];
   final List<Review> _reviews = [];
 
-  Restaurant(String name, String location, String phone, String description,
-      String image) {
+  Restaurant(String name, String address, String phone, String description,
+      String image, Geolocation geoLocation) {
     setName(name);
-    setLocation(location);
+    setAddress(address);
     setPhone(phone);
     setDescription(description);
     setImageUrl(image);
+    setGeoLocation(geoLocation);
   }
 
   factory Restaurant.fromFirebase(String docId, Map<String, dynamic> data) {
-    Restaurant restaurant = Restaurant(data["name"], data["location"],
-        data["phone"], data["description"], data["imageUrl"]);
+    // Get the geolocation
+    GeoPoint geoPoint = data["geoLocation"]["geopoint"];
+    Geolocation location = Geolocation(lat: geoPoint.latitude, long: geoPoint.longitude);
+    Restaurant restaurant = Restaurant(
+        data["name"],
+        data["address"],
+        data["phone"],
+        data["description"],
+        data["imageUrl"],
+        location);
     restaurant.setDocId(docId);
     restaurant._likes = data["likes"];
     restaurant._saves = data["saves"];
@@ -38,7 +52,7 @@ class Restaurant {
   Map<String, dynamic> toMap() {
     return {
       "name": _name,
-      "location": _location,
+      "address": _address,
       "phone": _phone,
       "description": _description,
       "imageUrl": _imageUrl,
@@ -49,7 +63,8 @@ class Restaurant {
           .map((Food food) => food.getDocId()),
       "reviews": _reviews
           .where((Review review) => review.getDocId() != null)
-          .map((Review review) => review.getDocId())
+          .map((Review review) => review.getDocId()),
+      "geoLocation": _geoLocation.data
     };
   }
 
@@ -70,14 +85,27 @@ class Restaurant {
     _name = name;
   }
 
-  String getLocation() {
-    return _location;
+  String getAddress() {
+    return _address;
   }
 
-  void setLocation(String location) {
-    if (!validateLocation(location))
+  void setAddress(String address) {
+    if (!validateAddress(address))
       throw ArgumentError("The location is invalid!");
-    _location = location;
+    _address = address;
+  }
+
+  Geolocation getGeoLocation() {
+    return Geolocation(
+        lat: _geoLocation.latitude, long: _geoLocation.longitude);
+  }
+
+  double getDistanceFromPosition(Geolocation geoLocation) {
+    return GeoFirePoint.distanceBetween(to: _geoLocation.coords, from: Coordinates(geoLocation.lat, geoLocation.long));
+  }
+
+  void setGeoLocation(Geolocation geoLocation) {
+    _geoLocation = GeoFirePoint(geoLocation.lat, geoLocation.long);
   }
 
   String getPhone() {
@@ -173,7 +201,7 @@ class Restaurant {
     return validNameRegex.hasMatch(name);
   }
 
-  static bool validateLocation(String location) {
+  static bool validateAddress(String location) {
     if (Utils.hasInvalidSpaces(location)) return false;
     RegExp validLocationRegex = RegExp(r"^.+$");
     return validLocationRegex.hasMatch(location);

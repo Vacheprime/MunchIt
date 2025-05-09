@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:munchit/model/user.dart';
 import 'package:munchit/view/Login/loginpage.dart';
 import 'package:munchit/view/Login/registerpage.dart';
 import 'package:munchit/view/settingspage.dart';

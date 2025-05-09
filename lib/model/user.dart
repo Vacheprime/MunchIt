@@ -2,6 +2,7 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:munchit/model/restaurant.dart';
 import 'food.dart';
 import 'review.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 /// User class is used to represent a user of the application.
 class User {
@@ -336,4 +337,17 @@ class UserSettings {
   bool areLocationServicesEnabled() {
     return _enabledLocationServices;
   }
+
+  // Request Notification Permissions
+  Future<void> requestNotificationPermissions() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications();
+      isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    }
+
+    _enabledNotifications = isAllowed;
+  }
+
 }

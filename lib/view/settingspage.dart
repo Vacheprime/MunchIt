@@ -14,9 +14,16 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool isDarkMode = false;
-  bool isNotifaction = false;
+  bool isNotification = false;
   bool isLocation = false;
 
+  @override
+  void initState() {
+    super.initState();
+    isNotification = widget.user.settings.areNotificationsEnabled();
+    isDarkMode = widget.user.settings.isDarkModeEnabled();
+    isLocation = widget.user.settings.areLocationServicesEnabled();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,12 +53,12 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) {
                     setState(() {
                       isDarkMode = value!;
+                      widget.user.settings.toggleDarkMode(); // Toggle the setting
                     });
                   },
                 ),
               ],
             ),
-
             SizedBox(height: 20),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -59,10 +66,18 @@ class _SettingsState extends State<Settings> {
                 Text("Notifications",  style: TextStyle(fontSize: 24)),
                 SizedBox(width: 20),
                 Checkbox(
-                  value: isNotifaction,
-                  onChanged: (value) {
+                  value: isNotification,
+                  onChanged:  (value) async {
                     setState(() {
-                      isNotifaction = value!;
+                      isNotification = value!;
+                    });
+                    if (value == true) {
+                      await widget.user.settings.requestNotificationPermissions();
+                    } else {
+                      widget.user.settings.toggleNotifications();
+                    }
+                    setState(() {
+                      isNotification = widget.user.settings.areNotificationsEnabled();
                     });
                   },
                 ),
@@ -85,6 +100,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
+            SizedBox(height: 20,),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutUs(user: widget.user,)));
@@ -99,9 +115,6 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             const SizedBox(height: 20,),
-            ElevatedButton(onPressed: () {
-              //save functionality
-            }, child: const Text("Save", style: TextStyle(fontSize: 24, color: Color.fromRGBO(248, 145, 145, 1)),))
           ],
         ),
       ),

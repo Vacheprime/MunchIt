@@ -12,14 +12,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  // Text field controllers
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  // Obscure password fields
   bool _isPassObscured = true;
   bool _isConfirmedPassObscured = true;
 

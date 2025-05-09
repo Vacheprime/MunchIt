@@ -1,13 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
 import 'package:munchit/services/repositories/food_repository.dart';
 import 'package:munchit/services/repositories/restaurant_repository.dart';
 import 'package:munchit/services/repositories/review_repository.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import '../firebase/firebasemanager.dart';
+import 'package:flutter/services.dart';
 
 final class UserRepository extends BaseRepository<UserRepository> {
   static const String collectionName = "users";
+  static const String credentialsFileName = "user_credentials.json";
 
   /// Default constructor.
   UserRepository(): super(collectionName);
@@ -26,24 +35,55 @@ final class UserRepository extends BaseRepository<UserRepository> {
     if (result.length != 1) return null;
     // Check if passwords match
     User user = result[0];
-    if (user.comparePassword(password)) return user;
+    if (user.comparePassword(password)) {
+      // Save credentials
+      _saveLoginCredentials(userName, password);
+      return user;
+    }
     return null;
   }
 
-  Future<User?> getLoggedInUser() async{
-    /*
-    final userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc('someUserId')
-        .get();
-
-    if (userDoc.exists) {
-      return User.fromFirebase(userDoc.id, userDoc.data()!);
+  Future<User?> getLoggedInUser() async {
+    Directory docsDir = await getApplicationDocumentsDirectory();
+    File credentialsFile = File(join(docsDir.path, credentialsFileName));
+    print(credentialsFile.path);
+    // Check if file exists
+    if (!(await credentialsFile.exists())) {
+      // Copy asset to writeable store
+      await _copyAssetToWritableStorage("lib/config/$credentialsFileName", credentialsFileName);
     }
+    // Read credentials
+    String data = await credentialsFile.readAsString();
+    // Attempt to parse
+    Map<String, dynamic> credentials = {};
+    try {
+      credentials = jsonDecode(data);
+    } catch (e) {
+      print("Error reading credentials file: $e");
+      return null;
+    }
+    // Attempt to login
+    return (await attemptLogin(credentials["username"], credentials["password"]));
+  }
 
-    return null;
+  Future<void> _copyAssetToWritableStorage(String asset, String fileName) async {
+    // Get documents directory
+    Directory dir = await getApplicationDocumentsDirectory();
+    // Get asset data
+    String data = await rootBundle.loadString(asset);
+    // Copy to writeable file
+    File writeableFile = File(join(dir.path, fileName));
+    await writeableFile.writeAsString(data, flush: true);
+  }
 
-     */
+  Future<void> _saveLoginCredentials(String username, String password) async {
+    // Get documents directory
+    Directory dir = await getApplicationDocumentsDirectory();
+    // Get file
+    File credentialsFile = File(join(dir.path, credentialsFileName));
+    // Get credentials as json string
+    Map<String, String> credentialsMap = {"username": username, "password": password};
+    await credentialsFile.writeAsString(jsonEncode(credentialsMap));
   }
 
   /// Filter users that have the given [userName].
@@ -131,5 +171,20 @@ final class UserRepository extends BaseRepository<UserRepository> {
   @override
   UserRepository clone(RepositoryQuery newQuery, List<Transformation> transformations) {
     return UserRepository._fromFilter(newQuery, transformations);
+  }
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await FirebaseManager.initFirebase();
+
+  UserRepository userRepository = UserRepository();
+  User? user = await userRepository.getLoggedInUser();
+  if (user != null) {
+    print(user.getEmail());
+  } else {
+    print("Could not login!");
   }
 }

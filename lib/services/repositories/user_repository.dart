@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:munchit/model/user.dart';
 import 'package:munchit/services/exceptions/FirestoreInsertException.dart';
 import 'package:munchit/services/repositories/base_repository.dart';
@@ -11,7 +10,6 @@ import 'package:munchit/services/repositories/restaurant_repository.dart';
 import 'package:munchit/services/repositories/review_repository.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import '../firebase/firebasemanager.dart';
 import 'package:flutter/services.dart';
 
 final class UserRepository extends BaseRepository<UserRepository> {
@@ -171,20 +169,5 @@ final class UserRepository extends BaseRepository<UserRepository> {
   @override
   UserRepository clone(RepositoryQuery newQuery, List<Transformation> transformations) {
     return UserRepository._fromFilter(newQuery, transformations);
-  }
-}
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Firebase
-  await FirebaseManager.initFirebase();
-
-  UserRepository userRepository = UserRepository();
-  User? user = await userRepository.getLoggedInUser();
-  if (user != null) {
-    print(user.getEmail());
-  } else {
-    print("Could not login!");
   }
 }

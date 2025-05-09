@@ -67,7 +67,7 @@ class _MainPageState extends State<MainPage> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${restaurant.getLocation()}'),
+                      Text('${restaurant.getAddress()}'),
                       Row(
                         children: [
                           Column(children: [

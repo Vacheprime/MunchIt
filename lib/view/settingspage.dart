@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:munchit/services/geolocation_service/geolocation_service.dart';
+import 'package:munchit/services/repositories/user_repository.dart';
 import 'package:munchit/view/aboutuspage.dart';
 
 import '../model/user.dart';
@@ -13,17 +15,19 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool isDarkMode = false;
-  bool isNotification = false;
-  bool isLocation = false;
+  late UserSettings settings = UserSettings();
 
   @override
   void initState() {
     super.initState();
-    isNotification = widget.user.settings.areNotificationsEnabled();
-    isDarkMode = widget.user.settings.isDarkModeEnabled();
-    isLocation = widget.user.settings.areLocationServicesEnabled();
+    settings = widget.user.settings;
   }
+
+  Future<void> _updateUser() async {
+    UserRepository repository = UserRepository();
+    repository.update(widget.user);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,12 +53,12 @@ class _SettingsState extends State<Settings> {
                 Text("Dark Mode",  style: TextStyle(fontSize: 24)),
                 SizedBox(width: 20),
                 Checkbox(
-                  value: isDarkMode,
-                  onChanged: (value) {
+                  value: settings.isDarkModeEnabled(),
+                  onChanged: (value) async {
                     setState(() {
-                      isDarkMode = value!;
-                      widget.user.settings.toggleDarkMode(); // Toggle the setting
+                      settings.toggleDarkMode(); // Toggle the setting
                     });
+                    await _updateUser();
                   },
                 ),
               ],
@@ -66,19 +70,15 @@ class _SettingsState extends State<Settings> {
                 Text("Notifications",  style: TextStyle(fontSize: 24)),
                 SizedBox(width: 20),
                 Checkbox(
-                  value: isNotification,
+                  value: settings.areNotificationsEnabled(),
                   onChanged:  (value) async {
                     setState(() {
-                      isNotification = value!;
+                      settings.toggleNotifications();
                     });
                     if (value == true) {
                       await widget.user.settings.requestNotificationPermissions();
-                    } else {
-                      widget.user.settings.toggleNotifications();
                     }
-                    setState(() {
-                      isNotification = widget.user.settings.areNotificationsEnabled();
-                    });
+                    await _updateUser();
                   },
                 ),
               ],
@@ -91,11 +91,11 @@ class _SettingsState extends State<Settings> {
                 Text("Location",  style: TextStyle(fontSize: 24)),
                 SizedBox(width: 20),
                 Checkbox(
-                  value: isLocation,
-                  onChanged: (value) {
-                    setState(() {
-                      isLocation = value!;
-                    });
+                  value: settings.areLocationServicesEnabled(),
+                  onChanged: (value) async {
+                    if (value != null) {
+                      await _toggleLocationServices(value);
+                    }
                   },
                 ),
               ],
@@ -119,5 +119,15 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  Future<void> _toggleLocationServices(bool value) async {
+    bool permissionGranted = await GeolocationService.requestLocationPermissions();
+    if (permissionGranted) {
+      setState(() {
+        settings.toggleLocationServices();
+      });
+      await _updateUser();
+    }
   }
 }

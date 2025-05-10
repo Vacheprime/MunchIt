@@ -124,6 +124,17 @@ final class UserRepository extends BaseRepository<UserRepository> {
     }
   }
 
+  Future<void> update(User user) async {
+    // Get colelction ref
+    CollectionReference collection = getCollectionReference();
+    try {
+      // Update the user
+      await collection.doc(user.getDocId()).update(user.toMap());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<User>> _mapFromSnapshots(List<DocumentSnapshot> docs) async {
     List<User> users = [];
     for (DocumentSnapshot doc in docs) {

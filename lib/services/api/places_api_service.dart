@@ -1,17 +1,20 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:munchit/services/geolocation_service/geolocation.dart';
 
 class PlacesApiService {
-  static const String apiKeyFile = "google_places_api_key.json";
+  static const String apiKeyAsset = "lib/services/api/config/google_places_api_key.json";
   late final GoogleMapsPlaces _places;
 
-  PlacesApiService() {
-    _loadFromApiKeyFile();
+  PlacesApiService();
+
+  Future<void> initialize() async {
+    await _loadApiKeyFromAsset();
   }
 
+  /// Radius in meters
   Future<List<PlacesSearchResult>> findRestaurantsNearby(
       Geolocation location, int radius,
       {String? name, String? address}) async {
@@ -34,10 +37,9 @@ class PlacesApiService {
     return detailsResponse.result;
   }
 
-  void _loadFromApiKeyFile() {
-    File file = File("lib/services/api/config/$apiKeyFile");
+  Future<void> _loadApiKeyFromAsset() async {
+    String apiKeyText = await rootBundle.loadString(apiKeyAsset);
     try {
-      String apiKeyText = file.readAsStringSync();
       Map<String, dynamic> keyJson = jsonDecode(apiKeyText);
       String key = keyJson["PlaceAPIKey"];
       _places = GoogleMapsPlaces(apiKey: key);

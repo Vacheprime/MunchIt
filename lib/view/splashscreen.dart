@@ -6,6 +6,8 @@ import 'Login/homepage.dart';
 import 'mainpage.dart';
 
 class Splash extends StatefulWidget {
+  // This function is passed from MyApp() and is used to set the MaterialApp
+  // theme.
   final void Function(ThemeMode) setThemeCallback;
   const Splash({Key? key, required this.setThemeCallback}) : super(key: key);
 
@@ -22,6 +24,9 @@ class _SplashState extends State<Splash> {
     _loadUserWithDelay(2);
   }
 
+  /// Attempt to login the user based on the cached credentials
+  ///
+  /// Wait [seconds] amount of seconds to display the Splash screen.
   Future<void> _loadUserWithDelay(int seconds) async {
     // Delay
     await Future.delayed(Duration(seconds: seconds));
@@ -42,7 +47,7 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

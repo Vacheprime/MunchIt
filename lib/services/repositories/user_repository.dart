@@ -84,6 +84,15 @@ final class UserRepository extends BaseRepository<UserRepository> {
     await credentialsFile.writeAsString(jsonEncode(credentialsMap));
   }
 
+  Future<void> eraseCredentials() async {
+    // Get documents directory
+    Directory dir = await getApplicationDocumentsDirectory();
+    // Get file
+    File credentialsFile = File(join(dir.path, credentialsFileName));
+    // Delete the credentials
+    await credentialsFile.delete();
+  }
+
   /// Filter users that have the given [userName].
   UserRepository withUserName(String userName) {
     return applyTransform((RepositoryQuery query) {

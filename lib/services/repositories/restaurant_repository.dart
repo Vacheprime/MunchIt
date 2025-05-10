@@ -38,6 +38,12 @@ final class RestaurantRepository extends BaseRepository<RestaurantRepository> {
     }).toList();
   }
 
+  RestaurantRepository withLimit(int limit) {
+    return applyTransform((RepositoryQuery query) {
+      return query.limit(limit);
+    });
+  }
+
   Stream<List<Restaurant>> getRestaurantsNearby(Geolocation geoLocation, double radius) {
     // Get collection
     CollectionReference collection = getCollectionReference();

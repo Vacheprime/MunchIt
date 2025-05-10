@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:munchit/model/restaurant.dart';
 import 'package:munchit/model/user.dart';
+import 'package:munchit/services/geolocation_service/geolocation_service.dart';
+import 'package:munchit/services/repositories/restaurant_repository.dart';
 import 'package:munchit/view/Restaurant/restaurantpage.dart';
 import 'package:munchit/view/UserDetails/accountpage.dart';
 import 'package:munchit/view/UserDetails/userstatspage.dart';
 import 'package:munchit/view/settingspage.dart';
+import '../services/geolocation_service/geolocation.dart' show Geolocation;
 import 'followingpage.dart';
 import 'Restaurant/createrestaurantpage.dart';
 
@@ -25,6 +28,117 @@ class _MainPageState extends State<MainPage> {
 
   String searchQuery = '';
   List<Restaurant> restaurants = [];
+
+  Stream<List<Restaurant>>? restaurantStream;
+
+  Future<void> _getSuggestedRestaurants() async {
+    // Get the user
+    User user = widget.user;
+    // Suggested choice
+    bool suggestByLocation = false;
+    if (user.settings.areLocationServicesEnabled()) {
+      if (!await GeolocationService.isLocationServicesAllowed()) {
+        if (await GeolocationService.requestLocationPermissions()) {
+          suggestByLocation = true;
+        }
+      }
+    }
+    RestaurantRepository repository = RestaurantRepository();
+    // Suggest by location if allowed
+    if (suggestByLocation) {
+      Geolocation position = await GeolocationService.getCurrentLocation();
+      restaurantStream = repository.getRestaurantsNearby(position, 5);
+    } else {
+      // Suggest random
+      restaurantStream = repository.withLimit(15).retrieve().asStream();
+    }
+  }
+
+  Widget _buildRestaurantListing() {
+    return StreamBuilder(
+      stream: restaurantStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        List<Restaurant> restaurants = snapshot.data!;
+        return Expanded(
+            child: ListView.builder(
+          itemCount: restaurants.length,
+          itemBuilder: (context, index) {
+            final restaurant = restaurants[index];
+            return Card(
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: ListTile(
+                leading: Container(
+                    width: 60,
+                    height: 60,
+                    child: Image.network(restaurant.getImageUrl())),
+                title: Text(restaurant.getName()),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(restaurant.getAddress()),
+                    Row(
+                      children: [
+                        Column(children: [
+                          IconButton(
+                            onPressed: () {
+                              //increase the like count of the restaurant
+                              //change the heart to a solid red one
+                              //add it to the user's like list
+                            },
+                            icon: Icon(Icons.favorite_border),
+                            iconSize: 16,
+                          ),
+                          SizedBox(width: 4),
+                          Text(restaurant.getLikes().toString()),
+                        ]),
+                        SizedBox(width: 10),
+                        Column(children: [
+                          IconButton(
+                            onPressed: () {
+                              //increase the save count of the restaurant
+                              //change the save to a solid yellow one
+                              //add it to the user's saved/favourite list
+                            },
+                            icon: Icon(Icons.request_page),
+                            iconSize: 16,
+                          ),
+                          SizedBox(width: 4),
+                          Text(restaurant.getSaves().toString()),
+                        ]),
+                        SizedBox(width: 10),
+                        Column(children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RestaurantInfo(
+                                          user: widget.user,
+                                          restaurant: restaurant)));
+                            },
+                            icon: Icon(Icons.comment),
+                            iconSize: 16,
+                          ),
+                          SizedBox(width: 4),
+                          Text('${restaurant.getReviews().length}'),
+                        ]),
+                        SizedBox(width: 10),
+                        Icon(Icons.star, size: 16),
+                        SizedBox(width: 4),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ));
+      },
+    );
+  }
 
   Widget buildSuggestedPage() {
     return Column(
@@ -51,82 +165,25 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) {
-              final restaurant = restaurants[index];
-              return Card(
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: ListTile(
-                  leading: Container(
-                      width: 60,
-                      height: 60,
-                      child: Image.network(restaurant.getImageUrl())),
-                  title: Text('${restaurant.getName()}'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${restaurant.getAddress()}'),
-                      Row(
-                        children: [
-                          Column(children: [
-                            IconButton(
-                              onPressed: () {
-                                //increase the like count of the restaurant
-                                //change the heart to a solid red one
-                                //add it to the user's like list
-                              },
-                              icon: Icon(Icons.favorite_border),
-                              iconSize: 16,
-                            ),
-                            SizedBox(width: 4),
-                            Text('${restaurant.getLikes()}'),
-                          ]),
-                          SizedBox(width: 10),
-                          Column(children: [
-                            IconButton(
-                              onPressed: () {
-                                //increase the save count of the restaurant
-                                //change the save to a solid yellow one
-                                //add it to the user's saved/favourite list
-                              },
-                              icon: Icon(Icons.request_page),
-                              iconSize: 16,
-                            ),
-                            SizedBox(width: 4),
-                            Text('${restaurant.getSaves()}'),
-                          ]),
-                          SizedBox(width: 10),
-                          Column(children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => RestaurantInfo(
-                                            user: widget.user,
-                                            restaurant: restaurant)));
-                              },
-                              icon: Icon(Icons.comment),
-                              iconSize: 16,
-                            ),
-                            SizedBox(width: 4),
-                            Text('${restaurant.getReviews().length}'),
-                          ]),
-                          SizedBox(width: 10),
-                          Icon(Icons.star, size: 16),
-                          SizedBox(width: 4),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+        FutureBuilder(
+            future: _getSuggestedRestaurants(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return _buildLoadingIndicator();
+              }
+              return _buildRestaurantListing();
+            })
       ],
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Container(
+      child: Container(
+        height: 100,
+        width: 100,
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
@@ -150,11 +207,11 @@ class _MainPageState extends State<MainPage> {
       drawer: Drawer(
         child: Column(
           children: [
-            DrawerHeader(
+            const DrawerHeader(
               decoration:
                   BoxDecoration(color: Color.fromRGBO(248, 145, 145, 1)),
               child: const Center(
-                  child: Text("Options", style: TextStyle(fontSize: 24))),
+                  child: Text("Munch't", style: TextStyle(fontSize: 24))),
             ),
             ListTile(
               title: Text("• Account"),
